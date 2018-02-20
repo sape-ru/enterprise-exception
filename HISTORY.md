@@ -9,7 +9,7 @@ This history log references the relevant changes like:
 
 Irrelevant changes that will not be mentioned here:
 - refactoring
-- documentation changes (readme, phpdoc, etc.)
+- documentation changes (readme, PHPDoc, etc.)
 - adding/updating/deleting examples
 
 And here goes the history itself...
