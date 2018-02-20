@@ -76,8 +76,8 @@ abstract class Parser
      * <pre>
      *  * ignore_invalid    => (bool) [default: false] If the Parser should suppress validations errors and ignore
      *                          (not to add to the returned data) invalid classes and exceptions;
-     *                          useful if you output the returned data to frontend interfaces (to show as much as
-     *                          possible without a page crash due to a validation error being thrown).
+     *                          might be useful if you output the returned data to frontend interfaces (to show as much
+     *                          as possible without a page crash due to a validation error being thrown).
      *  * is_extended       => (bool) [default: false] Controls the returned array formats;
      *                          read the 'return' documentation for more info.
      *  * locale            => (string) [default: $config_class_name::L10N_SYSTEM_LOCALE - the system locale]
@@ -123,6 +123,7 @@ abstract class Parser
      *
      * @return array The parsed data composed by the ::addExceptionData().
      *
+     * @throws \Exception   if the $config_class_name is not loaded.
      * @throws \Exception   if the $config_class_name is not of (or a subclass of) the BASE_CLASS_NAME.
      * @throws \Exception   if a class code is not valid (GlobalException::validateCodeClass()).
      * @throws \Exception   if two exception classes can generate identical global codes
@@ -133,6 +134,9 @@ abstract class Parser
     {
         /** @var string|CustomizableException $config_class_name Not an object; is needed for IDE hinting */
         static::loadClass($config_class_name);
+        if (!class_exists($config_class_name, false)) {
+            throw new \Exception('The config class "' . $config_class_name . '" is not loaded.');
+        }
 
         if (!is_a($config_class_name, static::BASE_CLASS_NAME, true)) {
             throw new \Exception(
@@ -467,7 +471,7 @@ abstract class Parser
      *
      * This method is called in the ::parse() for each class before its usage.
      *
-     * Initially this method does the class existence check only.
+     * Initially it is a stub which does nothing.
      * You can redefine it if you wish to load your exception classes one by one.
      *
      * @see Parser::parse() For the parser documentation.
@@ -475,14 +479,12 @@ abstract class Parser
      * @param string $class_name A fully qualified exception class name.
      *
      * @return void
-     *
-     * @throws \Exception if the exception class is not loaded.
      */
-    protected static function loadClass(string $class_name)
-    {
-        if (!class_exists($class_name, false)) {
-            throw new \Exception('The exception class "' . $class_name . '" is not loaded.');
-        }
+    protected static function loadClass(
+        /** @noinspection PhpUnusedParameterInspection */
+        string $class_name
+    ) {
+        return;
     }
 
     /**
@@ -490,7 +492,7 @@ abstract class Parser
      *
      * This method is called for each exception after all built-in filters in the ::parse().
      *
-     * Initially it is a stub method and always returns false.
+     * Initially this is a stub which always returns false.
      * You can redefine it to add any filtering rules you desire.
      *
      * @see Parser::parse()                                 For the parser documentation.

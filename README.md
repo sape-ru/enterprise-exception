@@ -8,9 +8,9 @@ to be written as separate document (possibly wiki-style pages) in near future.
 - [What is it for](#what-is-it-for)
 - [Requirements](#requirements)
 - [Installation](#installation)
-- [Usage (HOWTO lite edition)](#usage-(howto-lite-edition))
+- [Usage or HOWTO lite edition](#usage-or-howto-lite-edition)
 - [Near future plans](#near-future-plans)
-- [Want to contribute?](#want-to-contribute?)
+- [If you want to contribute](#if-you-want-to-contribute)
 
 ## What is it for
 
@@ -52,14 +52,14 @@ If so then you should use the [Parser](#for-customizable-exceptions-parsing).
 
 There are several ways to install the library:
 - GIT: clone / fork / the repository, include as submodule etc.
-- Manual #1: Download the repository :simple_smile:.
+- Manual #1: Download the repository :smile:.
 - Manual #2 (critical source only):
     - Download the [GlobalException.php](src/GlobalException.php) file for the exceptions codes globalization
     feature.
     - Download the file previously mentioned and the [CustomizableException](src/CustomizableException) folder for
     exceptions customizing and parsing functionality.
 
-## Usage (HOWTO lite edition)
+## Usage or HOWTO lite edition
 
 Every structural element is described in its PHPDoc.
 
@@ -111,6 +111,6 @@ opportunity to test this library and possibly improve it during the process.
 
 - **2018 late spring**: _the "HOWTO for dummies and experts" guide_.
 
-## Want to contribute?
+## If you want to contribute
 
 Feel free to read the [contribution guide](CONTRIBUTING.md).
