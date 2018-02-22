@@ -1,9 +1,9 @@
 <?php
 require_once __DIR__ . '/../src/GlobalException.php';
-require_once __DIR__ . '/../src/Examples/GlobalException/ExceptionConfig.php';
-require_once __DIR__ . '/../src/Examples/GlobalException/AException.php';
-require_once __DIR__ . '/../src/Examples/GlobalException/BException.php';
-require_once __DIR__ . '/../src/Examples/GlobalException/CException.php';
+require_once __DIR__ . '/resources/GlobalException/ExceptionConfig.php';
+require_once __DIR__ . '/resources/GlobalException/AException.php';
+require_once __DIR__ . '/resources/GlobalException/BException.php';
+require_once __DIR__ . '/resources/GlobalException/CException.php';
 
 use MagicPush\EnterpriseException\GlobalException;
 use MagicPush\EnterpriseException\Examples\GlobalException\AException;

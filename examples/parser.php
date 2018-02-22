@@ -2,9 +2,9 @@
 require_once __DIR__ . '/../src/GlobalException.php';
 require_once __DIR__ . '/../src/CustomizableException/CustomizableException.php';
 require_once __DIR__ . '/../src/CustomizableException/Parser.php';
-require_once __DIR__ . '/../src/Examples/CustomizableException/ExceptionConfig.php';
-require_once __DIR__ . '/../src/Examples/CustomizableException/AException.php';
-require_once __DIR__ . '/../src/Examples/CustomizableException/BException.php';
+require_once __DIR__ . '/resources/CustomizableException/ExceptionConfig.php';
+require_once __DIR__ . '/resources/CustomizableException/AException.php';
+require_once __DIR__ . '/resources/CustomizableException/BException.php';
 
 use MagicPush\EnterpriseException\Examples\CustomizableException\ExceptionConfig;
 use MagicPush\EnterpriseException\CustomizableException\Parser;

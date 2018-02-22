@@ -432,7 +432,7 @@ abstract class CustomizableException extends GlobalException
      *      class exception OR [classic mode] the optional exception message to throw.
      * @param string|int $details [customizable mode] The optional exception details (what exact value is invalid,
      *      what is expected etc.) OR [classic mode] the optional base (or full when not global) code
-     *      for the calling class exception .
+     *      for the calling class exception.
      * @param \Throwable|null $previous [optional] The previous throwable used for the exception chaining.
      */
     public function __construct(string $base_code = '', string $details = '', \Throwable $previous = null)
