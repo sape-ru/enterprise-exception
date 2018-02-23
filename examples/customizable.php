@@ -1,13 +1,11 @@
 <?php
 require_once __DIR__ . '/../src/GlobalException.php';
 require_once __DIR__ . '/../src/CustomizableException/CustomizableException.php';
-require_once __DIR__ . '/../src/Examples/CustomizableException/ExceptionConfig.php';
-require_once __DIR__ . '/../src/Examples/CustomizableException/AException.php';
-require_once __DIR__ . '/../src/Examples/CustomizableException/BException.php';
+require_once __DIR__ . '/resources/CustomizableException/CEExampleConfig.php';
+require_once __DIR__ . '/resources/CustomizableException/CEExampleA.php';
+require_once __DIR__ . '/resources/CustomizableException/CEExampleB.php';
 
 use MagicPush\EnterpriseException\CustomizableException\CustomizableException;
-use MagicPush\EnterpriseException\Examples\CustomizableException\AException;
-use MagicPush\EnterpriseException\Examples\CustomizableException\BException;
 
 
 /**
@@ -30,9 +28,9 @@ function showExample(string $exception_class)
             'random value: ' . mt_rand(1, 1000) // exception details
         );
 
-        if ($e instanceof AException && 2 == $base_code) {
+        if ($e instanceof CEExampleA && 2 == $base_code) {
             $e->setContext('REPLACED context');
-        } elseif ($e instanceof BException && 1 == $base_code) {
+        } elseif ($e instanceof CEExampleB && 1 == $base_code) {
             $e->setContext('ADDED context');
         }
 
@@ -53,5 +51,5 @@ function showExample(string $exception_class)
 }
 
 
-showExample(AException::class);
-showExample(BException::class);
+showExample(CEExampleA::class);
+showExample(CEExampleB::class);

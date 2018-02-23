@@ -175,37 +175,18 @@ abstract class CustomizableException extends GlobalException
     }
 
     /**
-     * Returns the formatted code of an exception to use in different exception string representations.
-     *
-     * Initially it returns the GlobalException::getCodeGlobal() as a string and is called in the CusomizableExcpetion
-     * methods ::getMessageDefault() and ::getMessageFeStub().
-     *
-     * @see GlobalException::getCodeGlobal()            For a global code calculation algorythm.
-     * @see CustomizableException::getMessageDefault()  For a default exception message composing algorythm.
-     * @see CustomizableException::getMessageFeStub()   For the frontend message stub composing algorythm.
-     *
-     * @param int $base_code An exception base (or full when not global) code.
-     *
-     * @return string An exception formatted code.
-     */
-    public static function getCodeFormatted(int $base_code): string
-    {
-        return (string) static::getCodeGlobal($base_code);
-    }
-
-    /**
      * Returns the translation of the $text string based on the $locale.
      *
-     * If the $locale is not specified it is assumed that the locale is determined automatically inside this method.
+     * If the $locale is null (by default) it is assumed that the locale is determined automatically inside this method.
      * For instance a user current session locale might be used. And if the $locale is equal to false it is assumed
-     * that no translation is needed.
+     * that no translation is needed (you can implement such a behavior if needed).
      *
      * Initially this method is called:
      * * during an exception construction for system and frontend versions of an exception message;
      * * when an exception context is set via the ::setContext();
      * * in the Parser::parse() for the message parts specified in the EXCEPTIONS_PROPERTIES configs.
      *
-     * Initially this is a stub method - it just returns the $text without any changes.
+     * Initially this is a stub which returns the $text without any changes.
      * It is your job to redefine this method and provide it with the translation algorythm you desire.
      * For instance many popular frameworks have such a feature implementation already.
      * Just call the needed function passing it the arguments this method gets.
@@ -215,7 +196,7 @@ abstract class CustomizableException extends GlobalException
      * @see Parser::parse()                         For the customizable exceptions Parser documentation.
      *
      * @param string $text The string to translate.
-     * @param string|bool $locale [optional] The locale used for the translation.
+     * @param string|bool|null $locale [optional] The locale used for the translation.
      * If equals false then no translation is made.
      *
      * @return string The translation of the $text string.
@@ -223,7 +204,7 @@ abstract class CustomizableException extends GlobalException
     public static function getL10N(
         string $text,
         /** @noinspection PhpUnusedParameterInspection */
-        $locale = ''
+        $locale = null
     ): string {
         return $text;
     }
@@ -280,7 +261,7 @@ abstract class CustomizableException extends GlobalException
      * Initially it is returned by the ::getMessageFe() if an exception $\_show_fe property equals false.
      * That is when you don't want user to see that exception real message.
      *
-     * Initially this method uses the ::getCodeFormatted() value to let users know an exception code
+     * Initially this method uses the GlobalException::getCodeFormatted() value to let users know an exception code
      * so they can then send it to support and ask for help.
      * The initial 'error' substring is passed to the ::getL10N() in case
      * if it's OK for your application to show this built-in message localized version to users.
@@ -288,10 +269,10 @@ abstract class CustomizableException extends GlobalException
      * Also this method is declared as public to let you call it independently. Just make sure to call it
      * from the right exception class and get the right global code if you use the GlobalException feature.
      *
-     * @see CustomizableException::getMessageFe()       For the frontend message composing algorythm.
-     * @see CustomizableException::canShowFe()          For getting the $_show_fe property value.
-     * @see CustomizableException::getCodeFormatted()   For an exception code formatting algorythm.
-     * @see CustomizableException::getL10N()            For the translation mechanism.
+     * @see CustomizableException::getMessageFe()   For the frontend message composing algorythm.
+     * @see CustomizableException::canShowFe()      For getting the $_show_fe property value.
+     * @see GlobalException::getCodeFormatted()     For an exception code formatting algorythm.
+     * @see CustomizableException::getL10N()        For the translation mechanism.
      *
      * @param int $base_code An exception base (or full when not global) code.
      *
@@ -313,11 +294,11 @@ abstract class CustomizableException extends GlobalException
      *
      * Initially the returned message contains the calling class name and its base and global codes
      * (identical if the GlobalException feature is not used for the calling class).
-     * The global code format is determined by the ::getCodeFormatted().
+     * The global code format is determined by the GlobalException::getCodeFormatted().
      *
      * @see CustomizableException::EXCEPTIONS_PROPERTIES    For setting the 'message' config property.
      * @see CustomizableException::__construct()            For an exception construction algorythm.
-     * @see CustomizableException::getCodeFormatted()       For an exception code formatting algorythm.
+     * @see GlobalException::getCodeFormatted()             For an exception code formatting algorythm.
      *
      * @param int $base_code An exception base (or full when not global) code.
      *
@@ -451,7 +432,7 @@ abstract class CustomizableException extends GlobalException
      *      class exception OR [classic mode] the optional exception message to throw.
      * @param string|int $details [customizable mode] The optional exception details (what exact value is invalid,
      *      what is expected etc.) OR [classic mode] the optional base (or full when not global) code
-     *      for the calling class exception .
+     *      for the calling class exception.
      * @param \Throwable|null $previous [optional] The previous throwable used for the exception chaining.
      */
     public function __construct(string $base_code = '', string $details = '', \Throwable $previous = null)

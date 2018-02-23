@@ -17,20 +17,6 @@ use MagicPush\EnterpriseException\GlobalException;
 abstract class Parser
 {
     /**
-     * @var string The base CustomizableException descendant class name.
-     *
-     * Is used in the ::parse() to check if the parsed config class is of this class or a subclass of this class and
-     * all parsed classes are subclasses of this class. Initially it has the CustomizableException fully qualified
-     * name. But you can replace it with your base exception class which extends the CustomizableException to ensure
-     * that there is no class specified out of that "family tree".
-     *
-     * @see Parser::parse()         For the parser documentation.
-     * @see CustomizableException   For the customizable exceptions documentation.
-     */
-    const BASE_CLASS_NAME = CustomizableException::class;
-
-
-    /**
      * Parses CustomizableException classes and acts differently depending on the $options specified.
      *
      * This method can parse exceptions only via extracting class names from the CLASS_CODE_LIST config
@@ -68,16 +54,17 @@ abstract class Parser
      * @see CustomizableException::L10N_SYSTEM_LOCALE       For checking / setting the system message locale.
      * @see CustomizableException::getL10N()                For the translation mechanism.
      * @see CustomizableException::getClassSection()        For the class section determination.
-     * @see Parser::BASE_CLASS_NAME                         For checking / setting the base CustomizableException
-     *                                                      descendant class name.
      *
      * @param string $config_class_name The CustomizableException base subclass with the CLASS_CODE_LIST set up.
      * @param array $options An array of parsing options. This method already supports the options:
      * <pre>
+     *  * add_errors        => (bool) [default: false] If the Parser should act like the 'ignore_invalid' option is
+     *                          turned on but also add validations errors messages to the output
+     *                          under the '__errors' 1-level key.
      *  * ignore_invalid    => (bool) [default: false] If the Parser should suppress validations errors and ignore
      *                          (not to add to the returned data) invalid classes and exceptions;
-     *                          useful if you output the returned data to frontend interfaces (to show as much as
-     *                          possible without a page crash due to a validation error being thrown).
+     *                          might be useful if you output the returned data to frontend interfaces (to show as much
+     *                          as possible without a page crash due to a validation error being thrown).
      *  * is_extended       => (bool) [default: false] Controls the returned array formats;
      *                          read the 'return' documentation for more info.
      *  * locale            => (string) [default: $config_class_name::L10N_SYSTEM_LOCALE - the system locale]
@@ -113,9 +100,11 @@ abstract class Parser
      *  * class_name_part_list_in   => (array) [default: []] Only classes with fully qualified names
      *                                  containing the specified substrings.
      *  * class_section_list_ex     => (array) [default: []] All classes but those with sections
-     *                                  (CustomizableException::getClassSection()) equal to the specified.
+     *                                  (CustomizableException::getClassSection()) equal to the specified;
+     *                                  doesn't work with the GlobalException descendants.
      *  * class_section_list_in     => (array) [default: []] Only classes with sections
-     *                                  (CustomizableException::getClassSection()) equal to the specified.
+     *                                  (CustomizableException::getClassSection()) equal to the specified;
+     *                                  doesn't work with the GlobalException descendants.
      *  * show_fe                   => (bool) [default: null] Filters exceptions by the 'show_fe' property:
      *                                  true  => exceptions with the 'show_fe' property equal to true;
      *                                  false => exceptions with the 'show_fe' property missing or equal to false.
@@ -123,7 +112,8 @@ abstract class Parser
      *
      * @return array The parsed data composed by the ::addExceptionData().
      *
-     * @throws \Exception   if the $config_class_name is not of (or a subclass of) the BASE_CLASS_NAME.
+     * @throws \Exception   if the $config_class_name is not loaded.
+     * @throws \Exception   if the $config_class_name is not a subclass of the CustomizableException.
      * @throws \Exception   if a class code is not valid (GlobalException::validateCodeClass()).
      * @throws \Exception   if two exception classes can generate identical global codes
      *                      (GlobalException::getCodeGlobal(1)).
@@ -133,13 +123,18 @@ abstract class Parser
     {
         /** @var string|CustomizableException $config_class_name Not an object; is needed for IDE hinting */
         static::loadClass($config_class_name);
+        if (!class_exists($config_class_name, false)) {
+            throw new \Exception('The config class "' . $config_class_name . '" is not loaded.');
+        }
 
-        if (!is_a($config_class_name, static::BASE_CLASS_NAME, true)) {
+        $base_class_name = CustomizableException::class;
+
+        if (!is_subclass_of($config_class_name, $base_class_name, true)) {
             throw new \Exception(
                 sprintf(
-                    'The config class "%s" is not of (or a subclass of) "%s"',
+                    'The config class "%s" is not a subclass of "%s"',
                     $config_class_name,
-                    static::BASE_CLASS_NAME
+                    $base_class_name
                 )
             );
         }
@@ -152,6 +147,7 @@ abstract class Parser
         /* Defaults */
 
         $options += [
+            'add_errors'     => false,
             'ignore_invalid' => false,
             'is_extended'    => false,
             'locale'         => $config_class_name::L10N_SYSTEM_LOCALE,
@@ -202,10 +198,12 @@ abstract class Parser
 
         /* /Optimization prerequisites */
 
-        $classes_names_by_codes_arr = [];
+        $classes_names_by_codes_arr = $validation_errors_arr = [];
         foreach ($config_class_name::CLASS_CODE_LIST as $class_name => $class_code) {
             /** @var string|CustomizableException $class_name Not an object; is needed for IDE hinting */
             static::loadClass($class_name);
+
+            $is_subclass_of_customizable = is_subclass_of($class_name, $base_class_name, true);
 
             /* Class filtering */
 
@@ -216,12 +214,21 @@ abstract class Parser
                 continue;
             }
 
-            $class_section = $class_name::getClassSection();
-            if ($class_section_list_flipped_ex && array_key_exists($class_section, $class_section_list_flipped_ex)) {
-                continue;
-            }
-            if ($class_section_list_flipped_in && !array_key_exists($class_section, $class_section_list_flipped_in)) {
-                continue;
+            if ($is_subclass_of_customizable) {
+                $class_section = $class_name::getClassSection();
+                if (
+                    $class_section_list_flipped_ex
+                    && array_key_exists($class_section, $class_section_list_flipped_ex)
+                ) {
+                    continue;
+                }
+
+                if (
+                    $class_section_list_flipped_in
+                    && !array_key_exists($class_section, $class_section_list_flipped_in)
+                ) {
+                    continue;
+                }
             }
 
             foreach ($filters['class_name_part_list_ex'] as $class_name_part) {
@@ -263,7 +270,11 @@ abstract class Parser
                     }
                     $classes_names_by_codes_arr[$global_code_potential] = $class_name;
                 } catch (\Exception $e) {
-                    if ($options['ignore_invalid']) {
+                    if ($options['add_errors'] || $options['ignore_invalid']) {
+                        if ($options['add_errors']) {
+                            $validation_errors_arr[] = $e->getMessage();
+                        }
+
                         continue;
                     }
 
@@ -272,7 +283,7 @@ abstract class Parser
             }
 
             if (
-                !is_subclass_of($class_name, static::BASE_CLASS_NAME, true)
+                !$is_subclass_of_customizable
                 || empty($class_name::EXCEPTIONS_PROPERTIES)
             ) {
                 continue;
@@ -338,7 +349,11 @@ abstract class Parser
                     try {
                         $class_name::validateCodeBase($base_code);
                     } catch (\Exception $e) {
-                        if ($options['ignore_invalid']) {
+                        if ($options['add_errors'] || $options['ignore_invalid']) {
+                            if ($options['add_errors']) {
+                                $validation_errors_arr[] = $e->getMessage();
+                            }
+
                             continue;
                         }
 
@@ -364,6 +379,10 @@ abstract class Parser
         }
         unset($classes_names_by_codes_arr);
 
+        if ($options['add_errors']) {
+            $parsed_data['__errors'] = $validation_errors_arr;
+        }
+
         return $parsed_data;
     }
 
@@ -373,7 +392,8 @@ abstract class Parser
      *
      * The $parsed_data array always has two levels. The first level key can be:
      * * '__global' - for classes using the GlobalException globalization feature;
-     * * a class fully qualified name - for other classes (a class code is always equal to 0 in this case).
+     * * a class fully qualified name - for other classes (a class code is always equal to 0 in this case);
+     * * '__errors' - if the $options['add_erros'] equals true and there are validations errors encountered.
      *
      * The second level key is an exception (global) code (which you get via the \Exception::getCode()).
      *
@@ -467,7 +487,7 @@ abstract class Parser
      *
      * This method is called in the ::parse() for each class before its usage.
      *
-     * Initially this method does the class existence check only.
+     * Initially it is a stub which does nothing.
      * You can redefine it if you wish to load your exception classes one by one.
      *
      * @see Parser::parse() For the parser documentation.
@@ -475,14 +495,12 @@ abstract class Parser
      * @param string $class_name A fully qualified exception class name.
      *
      * @return void
-     *
-     * @throws \Exception if the exception class is not loaded.
      */
-    protected static function loadClass(string $class_name)
-    {
-        if (!class_exists($class_name, false)) {
-            throw new \Exception('The exception class "' . $class_name . '" is not loaded.');
-        }
+    protected static function loadClass(
+        /** @noinspection PhpUnusedParameterInspection */
+        string $class_name
+    ) {
+        return;
     }
 
     /**
@@ -490,7 +508,7 @@ abstract class Parser
      *
      * This method is called for each exception after all built-in filters in the ::parse().
      *
-     * Initially it is a stub method and always returns false.
+     * Initially this is a stub which always returns false.
      * You can redefine it to add any filtering rules you desire.
      *
      * @see Parser::parse()                                 For the parser documentation.

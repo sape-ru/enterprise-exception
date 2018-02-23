@@ -92,6 +92,38 @@ abstract class GlobalException extends \Exception
     }
 
     /**
+     * Returns the biggest class code possible.
+     *
+     * This method is finalized intentionally. The calculation is based on the GLOBAL_CODE_MAX_RELATIVE and
+     * CLASS_CODE_MULTIPLIER values. Redefine these if you want to change possible results.
+     *
+     * @see GlobalException::GLOBAL_CODE_MAX_RELATIVE   For checking / setting the value.
+     * @see GlobalException::CLASS_CODE_MULTIPLIER      For checking / setting the value.
+     *
+     * @return int the biggest class code possible
+     */
+    public static final function getCodeClassMax(): int
+    {
+        return intval(floor(static::GLOBAL_CODE_MAX_RELATIVE / static::CLASS_CODE_MULTIPLIER) - 1);
+    }
+
+    /**
+     * Returns the formatted code of an exception to use in different exception string representations.
+     *
+     * Initially it returns the GlobalException::getCodeGlobal() as a string.
+     *
+     * @see GlobalException::getCodeGlobal()    For a global code calculation algorythm.
+     *
+     * @param int $base_code An exception base (or full when not global) code.
+     *
+     * @return string An exception formatted code.
+     */
+    public static function getCodeFormatted(int $base_code): string
+    {
+        return (string) static::getCodeGlobal($base_code);
+    }
+
+    /**
      * Returns the calculated valid exception code based on the calling class.
      *
      * This exception code may be considered global if the calling class code is set properly
@@ -200,14 +232,14 @@ abstract class GlobalException extends \Exception
     /**
      * Checks if the class code is valid to be a part of an exception global code.
      *
-     * The validation is based on GLOBAL_CODE_MAX_RELATIVE and CLASS_CODE_MULTIPLIER values to determine
-     * if a hypothetical global code would be bigger than the PHP integer maximum or your custom maximum.
+     * The validation is based on the ::getCodeClassMax() result to determine if a hypothetical global code would be
+     * bigger than the PHP integer maximum or your custom maximum (specified in the GLOBAL_CODE_MAX_RELATIVE constant).
      * It also checks if the class code equals to 0 or positive.
      *
      * Initially this method is called in the ::getCodeClass() and ::getCodeParts().
      *
-     * @see GlobalException::GLOBAL_CODE_MAX_RELATIVE   Used to calculate a class code maximum value.
-     * @see GlobalException::CLASS_CODE_MULTIPLIER      Used to calculate a class code maximum value.
+     * @see GlobalException::getCodeClassMax()          For the biggest class code calculation.
+     * @see GlobalException::GLOBAL_CODE_MAX_RELATIVE   The relative maximum exception global code possible.
      * @see GlobalException::getCodeClass()             For a class code determining rules.
      * @see GlobalException::getCodeParts()             For a global code decomposition algorythm.
      *
@@ -230,7 +262,7 @@ abstract class GlobalException extends \Exception
             throw new \Exception($message . ' must be 0 (not global) or positive.');
         }
 
-        $class_code_max = intval(floor(static::GLOBAL_CODE_MAX_RELATIVE / static::CLASS_CODE_MULTIPLIER) - 1);
+        $class_code_max = self::getCodeClassMax();
         if ($class_code <= $class_code_max) {
             return;
         }

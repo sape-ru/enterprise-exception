@@ -1,0 +1,30 @@
+{
+    "name": "magic-push/enterprise-exception",
+    "type": "library",
+    "description": "Global and customizable exceptions for large web applications.",
+    "keywords": [
+        "exception",
+        "global-exception-handling",
+        "customizable-exceptions",
+        "exception-management",
+        "exception-handling"
+    ],
+    "homepage": "https://github.com/MagicPush/enterprise-exception",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kirill Ulanovskiy",
+            "email": "xerxes.home@gmail.com",
+            "homepage": "https://github.com/MagicPush",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.0 || ^7.1 || 7.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "MagicPush\\EnterpriseException\\": "src/"
+        }
+    }
+}
