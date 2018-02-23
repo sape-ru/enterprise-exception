@@ -51,9 +51,13 @@ If so then you should use the [Parser](#for-customizable-exceptions-parsing).
 ## Installation
 
 There are several ways to install the library:
+- Composer:
+```
+composer require magic-push/enterprise-exception
+```
 - GIT: clone / fork / the repository, include as submodule etc.
 - Manual #1: Download the repository :smile:.
-- Manual #2 (critical source only):
+- Manual #2 (your tasks related source only):
     - Download the [GlobalException.php](src/GlobalException.php) file for the exceptions codes globalization
     feature.
     - Download the file previously mentioned and the [CustomizableException](src/CustomizableException) folder for
@@ -103,13 +107,7 @@ you don't want to use the globalization feature itself.
 
 ## Near future plans
 
-- **2018-03-1X**: _beta testing and issue #1 resolving_.
-
-Replacing current (v1.0) exceptions management system in the [@sape-ru](https://github.com/sape-ru) project with this
-repository code. More than thousand of exceptions defined in more than hundred exception classes - that's a good
-opportunity to test this library and possibly improve it during the process.
-
-- **2018 late spring**: _the "HOWTO for dummies and experts" guide_.
+- **2018-03-31**: _the "HOWTO for dummies and experts" guide_.
 
 ## If you want to contribute
 
