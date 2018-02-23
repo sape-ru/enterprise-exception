@@ -63,8 +63,8 @@ There are several ways to install the library:
 
 Every structural element is described in its PHPDoc.
 
-There are [example classes](src/Examples) and [demo scripts](examples) for quick features overview. You can launch
-demos via CLI:
+There are [example classes](examples/resources) and [demo scripts](examples) for quick features overview.
+You can launch demos via CLI:
 
 ```
 php examples/global.php # or any other *.php file
