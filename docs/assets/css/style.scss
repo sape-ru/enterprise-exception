@@ -1,0 +1,16 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+.container {
+    max-width: 70%;
+}
+
+code.highlighter-rouge {
+    color: #d0d0d0;
+    background-color: black;
+    font-family: monospace;
+    font-size: 90%;
+    padding: 4px;
+}
