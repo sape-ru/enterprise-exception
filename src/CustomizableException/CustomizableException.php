@@ -95,14 +95,14 @@ abstract class CustomizableException extends GlobalException
      * </pre>
      *
      * @see CustomizableException::$_context            For the 'context' config property runtime storage.
-     * @see CustomizableException::getMessageComposed() For the full exception message composing algorythm.
+     * @see CustomizableException::getMessageComposed() For the full exception message composing algorithm.
      * @see CustomizableException::setContext()         For setting the 'context' config property during runtime.
      * @see CustomizableException::getMessageDefault()  For getting the default 'message' config property.
      * @see CustomizableException::$_message_base       For the 'message' config property runtime storage.
-     * @see CustomizableException::getMessageFe()       For the frontend message composing algorythm.
-     * @see CustomizableException::getMessageFeStub()   For the stub frontend message composing algorythm.
+     * @see CustomizableException::getMessageFe()       For the frontend message composing algorithm.
+     * @see CustomizableException::getMessageFeStub()   For the stub frontend message composing algorithm.
      * @see CustomizableException::$_show_fe            For the 'show_fe' config property runtime storage.
-     * @see CustomizableException::__construct()        For an exception construction algorythm
+     * @see CustomizableException::__construct()        For an exception construction algorithm
      *                                                  (also this config usage).
      * @see Parser::parse()                             For the customizable exceptions Parser documentation.
      */
@@ -115,7 +115,7 @@ abstract class CustomizableException extends GlobalException
      * of an exception message parts.
      *
      * @see CustomizableException::getL10N()        For the translation mechanism.
-     * @see CustomizableException::__construct()    For an exception construction algorythm.
+     * @see CustomizableException::__construct()    For an exception construction algorithm.
      */
     const L10N_SYSTEM_LOCALE = 'en';
 
@@ -127,13 +127,13 @@ abstract class CustomizableException extends GlobalException
      *                                                      (the 'context' config property).
      * @see CustomizableException::getContext()             For getting the value.
      * @see CustomizableException::setContext()             For replacing the default value.
-     * @see CustomizableException::getMessageComposed()     For usage in the full exception message composing algorythm.
+     * @see CustomizableException::getMessageComposed()     For usage in the full exception message composing algorithm.
      */
     protected $_context = '';
     /**
      * @var string $_details Optional exception details (what exact value is invalid, what is expected etc.).
      *
-     * @see CustomizableException::getMessageComposed() For usage in the full exception message composing algorythm.
+     * @see CustomizableException::getMessageComposed() For usage in the full exception message composing algorithm.
      * @see CustomizableException::getDetails()         For getting the value.
      */
     protected $_details = '';
@@ -143,14 +143,14 @@ abstract class CustomizableException extends GlobalException
      * @see CustomizableException::EXCEPTIONS_PROPERTIES    For setting the value
      *                                                      (the 'message' and 'message_fe' config properties).
      * @see CustomizableException::getMessageBase()         For getting the value.
-     * @see CustomizableException::getMessageComposed()     For usage in the full exception message composing algorythm.
+     * @see CustomizableException::getMessageComposed()     For usage in the full exception message composing algorithm.
      */
     protected $_message_base;
     /**
      * @var bool $_show_fe An optional flag to control if the ::getMessageFe() should return the real message.
      *
      * @see CustomizableException::EXCEPTIONS_PROPERTIES    For setting the value (the 'show_fe' config property).
-     * @see CustomizableException::getMessageFe()           For the frontend message composing algorythm.
+     * @see CustomizableException::getMessageFe()           For the frontend message composing algorithm.
      * @see CustomizableException::canShowFe()              For getting the value.
      * @see CustomizableException::__construct()            For cases when the the 'show_fe' config property is ignored.
      */
@@ -187,11 +187,11 @@ abstract class CustomizableException extends GlobalException
      * * in the Parser::parse() for the message parts specified in the EXCEPTIONS_PROPERTIES configs.
      *
      * Initially this is a stub which returns the $text without any changes.
-     * It is your job to redefine this method and provide it with the translation algorythm you desire.
+     * It is your job to redefine this method and provide it with the translation algorithm you desire.
      * For instance many popular frameworks have such a feature implementation already.
      * Just call the needed function passing it the arguments this method gets.
      *
-     * @see CustomizableException::__construct()    For an exception construction algorythm.
+     * @see CustomizableException::__construct()    For an exception construction algorithm.
      * @see CustomizableException::setContext()     For setting an exception $_context property during runtime.
      * @see Parser::parse()                         For the customizable exceptions Parser documentation.
      *
@@ -221,8 +221,8 @@ abstract class CustomizableException extends GlobalException
      * * in the ::getMessageFe() to compose the frontend version of the message
      * * in the Parser::parse() to compose a localized version of the message for short output
      *
-     * @see CustomizableException::__construct()    For an exception construction algorythm.
-     * @see CustomizableException::getMessageFe()   For the frontend message composing algorythm.
+     * @see CustomizableException::__construct()    For an exception construction algorithm.
+     * @see CustomizableException::getMessageFe()   For the frontend message composing algorithm.
      * @see Parser::parse()                         For the customizable exceptions Parser documentation.
      *
      * @param string $message The base exception message (usually is enough to describe an exception).
@@ -269,9 +269,9 @@ abstract class CustomizableException extends GlobalException
      * Also this method is declared as public to let you call it independently. Just make sure to call it
      * from the right exception class and get the right global code if you use the GlobalException feature.
      *
-     * @see CustomizableException::getMessageFe()   For the frontend message composing algorythm.
+     * @see CustomizableException::getMessageFe()   For the frontend message composing algorithm.
      * @see CustomizableException::canShowFe()      For getting the $_show_fe property value.
-     * @see GlobalException::getCodeFormatted()     For an exception code formatting algorythm.
+     * @see GlobalException::getCodeFormatted()     For an exception code formatting algorithm.
      * @see CustomizableException::getL10N()        For the translation mechanism.
      *
      * @param int $base_code An exception base (or full when not global) code.
@@ -297,8 +297,8 @@ abstract class CustomizableException extends GlobalException
      * The global code format is determined by the GlobalException::getCodeFormatted().
      *
      * @see CustomizableException::EXCEPTIONS_PROPERTIES    For setting the 'message' config property.
-     * @see CustomizableException::__construct()            For an exception construction algorythm.
-     * @see GlobalException::getCodeFormatted()             For an exception code formatting algorythm.
+     * @see CustomizableException::__construct()            For an exception construction algorithm.
+     * @see GlobalException::getCodeFormatted()             For an exception code formatting algorithm.
      *
      * @param int $base_code An exception base (or full when not global) code.
      *
@@ -326,7 +326,7 @@ abstract class CustomizableException extends GlobalException
      *
      * @see CustomizableException::EXCEPTIONS_PROPERTIES    For setting an exception properties' config
      *                                                      under the $base_code as a key.
-     * @see CustomizableException::__construct()            For an exception construction algorythm.
+     * @see CustomizableException::__construct()            For an exception construction algorithm.
      *
      * @param int $base_code An exception base (or full when not global) code.
      *
@@ -414,10 +414,10 @@ abstract class CustomizableException extends GlobalException
      * without specifying a locale.
      *
      * @see GlobalException::__construct()                  The parent constructor.
-     * @see CustomizableException::getMessageComposed()     For the full exception message composing algorythm.
+     * @see CustomizableException::getMessageComposed()     For the full exception message composing algorithm.
      * @see CustomizableException::getL10N()                For the translation mechanism.
      * @see CustomizableException::L10N_SYSTEM_LOCALE       For checking / setting the system message locale.
-     * @see CustomizableException::getMessageFe()           For the frontend message composing algorythm.
+     * @see CustomizableException::getMessageFe()           For the frontend message composing algorithm.
      * @see CustomizableException::getContext()             For getting the $_context property value.
      * @see CustomizableException::getDetails()             For getting the $_details property value.
      * @see CustomizableException::getMessageBase()         For getting the $_message_base property value.
@@ -487,7 +487,7 @@ abstract class CustomizableException extends GlobalException
      * Returns the exception flag if the ::getMessageFe() should return the real message.
      *
      * @see CustomizableException::EXCEPTIONS_PROPERTIES    For setting the value (the 'show_fe' config property).
-     * @see CustomizableException::getMessageFe()           For the frontend message composing algorythm.
+     * @see CustomizableException::getMessageFe()           For the frontend message composing algorithm.
      * @see CustomizableException::__construct()            For cases when the the 'show_fe' config property is ignored.
      *
      * @return bool The flag if the exception message can be shown in frontend interfaces.
@@ -516,7 +516,7 @@ abstract class CustomizableException extends GlobalException
      *
      * This value is set in the constructor only by being passed as one of its parameters.
      *
-     * @see CustomizableException::__construct()    For the exception construction algorythm.
+     * @see CustomizableException::__construct()    For the exception construction algorithm.
      *
      * @return string The exception details.
      */
@@ -533,7 +533,7 @@ abstract class CustomizableException extends GlobalException
      *
      * @see CustomizableException::EXCEPTIONS_PROPERTIES    For configuring the value
      *                                                      (the 'message' and 'message_fe' config properties).
-     * @see CustomizableException::__construct()            For the exception construction algorythm where this value
+     * @see CustomizableException::__construct()            For the exception construction algorithm where this value
      *                                                      is set depending on circumstances.
      *
      * @return string The exception base message.
@@ -554,11 +554,11 @@ abstract class CustomizableException extends GlobalException
      *
      * @see CustomizableException::canShowFe()          For checking if the exception message can be shown
      *                                                  in frontend interfaces
-     * @see CustomizableException::getMessageComposed() For the full exception message composing algorythm.
+     * @see CustomizableException::getMessageComposed() For the full exception message composing algorithm.
      * @see CustomizableException::getMessageBase()     For getting the $_message_base property value.
      * @see CustomizableException::getContext()         For getting the $_context property value.
      * @see CustomizableException::getDetails()         For getting the $_details property value.
-     * @see CustomizableException::getMessageFeStub()   For the stub composing algorythm.
+     * @see CustomizableException::getMessageFeStub()   For the stub composing algorithm.
      *
      * @return string The exception frontend message.
      */

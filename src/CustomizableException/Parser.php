@@ -425,7 +425,7 @@ abstract class Parser
      * the existing ones.
      *
      * @see Parser::parse()                                 For the parser documentation.
-     * @see CustomizableException::getMessageComposed()     For the full exception message composing algorythm.
+     * @see CustomizableException::getMessageComposed()     For the full exception message composing algorithm.
      * @see GlobalException                                 For the global exceptions documentation.
      * @see CustomizableException::getClassSection()        For the class section determination.
      * @see CustomizableException::EXCEPTIONS_PROPERTIES    For checking / setting up a class exceptions properties.
