@@ -3,8 +3,8 @@
 (browse: [src/GlobalException.php](../../../../src/GlobalException.php))
 
 Contents:
-- [Problem](#Problem)
-- [Solution](#Solution)
+- [Problem](#problem)
+- [Solution](#solution)
 - [How it works](#how-it-works)
 - [Setup](#setup)
 - [Further reading](#further-reading)
@@ -58,7 +58,7 @@ The globalization mechanism is based on a simple math calculation involving main
 - _Class code_ - that's the integer which transforms _base codes_ into _global_ ones becoming their "higher" part.
 It is configured in an exception class config.
 
-For instance **GlobalException** can create an exception with it's code _45600123_ based on the _base code_ _123_ and
+For instance **GlobalException** can create an exception with its code _45600123_ based on the _base code_ _123_ and
 the _class code_ _456_.
 
 In most cases that is enough to have all your app exceptions codes unique. But sometimes you can not afford so small
@@ -93,6 +93,11 @@ echo $e->getCodeBase(); // >> 5
 That's it! From this point every _UserException_ construction with _base codes_ from _1_ to _9999_ will create
 exceptions with _global codes_ from _4200001_ to _4299999_. Add more exception classes to the  **CLASS_CODE_LIST**,
 specify unique _class codes_ for each and all those classes will generate exceptions with unique codes!
+
+This repository contains an example script with a few classess configured. Just launch it in the CLI:
+```php
+php examples/global.php
+```
 
 Defining an abstract base exception class is not obligatory but there are reasons for it:
 - You can define the **CLASS_CODE_LIST** inside the _UserException_ and such a setup will work perfectly.
