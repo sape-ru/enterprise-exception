@@ -1,10 +1,13 @@
 # GlobalException
 
-([src/GlobalException.php](../../../../src/GlobalException.php))
+(browse: [src/GlobalException.php](../../../../src/GlobalException.php))
 
+Contents:
 - [Problem](#Problem)
 - [Solution](#Solution)
 - [How it works](#how-it-works)
+- [Setup](#setup)
+- [Further reading](#further-reading)
 
 ## Problem
 
@@ -52,11 +55,52 @@ So how exactly **GlobalException** can do such a trick easily and mostly automat
 
 The globalization mechanism is based on a simple math calculation involving mainly these two integers:
 - _Base code_ - it is specified as an exception code: you pass it as the second parameter to an exception constructor.
-- _Class code_ - that's the integer which transforms base codes into global ones becoming their "higher" part. It is
-configured in an exception class config.
+- _Class code_ - that's the integer which transforms _base codes_ into _global_ ones becoming their "higher" part.
+It is configured in an exception class config.
 
-For instance **GlobalException** can create an exception with it's code _45600123_ based on the base code _123_ and the
-class code _456_.
+For instance **GlobalException** can create an exception with it's code _45600123_ based on the _base code_ _123_ and
+the _class code_ _456_.
 
 In most cases that is enough to have all your app exceptions codes unique. But sometimes you can not afford so small
-(or large) base codes. Such cases are described in the [guide for experienced]().
+(or large) _base codes_. Such cases are described in the [_experienced_ section]().
+
+## Setup
+
+Let's imagine, you have an exception class called _UserException_. You can throw some exceptions of this class with
+different codes. For instance you can throw an exception "_No money - no honey!_" with the code _5_. And you want
+this code (and other _UserException_ codes) become _global_...
+
+1. Create an abstract exception class for all your application exceptions. It must extend **GlobalException**.
+1. Define inside the constant array **CLASS_CODE_LIST** with the _UserException_ class as its element:
+```php
+use MagicPush\EnterpriseException\GlobalException;
+
+abstract class AppException extends GlobalException
+{
+    const CLASS_CODE_LIST = [
+        UserException::class => 42,
+    ];
+}
+```
+1. Extend _UserException_ from _AppException_ (or whatever name you give it).
+1. Create _UserException_ objects as usual: global codes will be calculated automaticaly!
+```php
+$e = new UserException('No money - no honey!', 5);
+echo $e->getCode(); // >> 4200005
+echo $e->getCodeBase(); // >> 5
+```
+
+That's it! From this point every _UserException_ construction with _base codes_ from _1_ to _9999_ will create
+exceptions with _global codes_ from _4200001_ to _4299999_. Add more exception classes to the  **CLASS_CODE_LIST**,
+specify unique _class codes_ for each and all those classes will generate exceptions with unique codes!
+
+Defining an abstract base exception class is not obligatory but there are reasons for it:
+- You can define the **CLASS_CODE_LIST** inside the _UserException_ and such a setup will work perfectly.
+But it is more convenient to control your exceptions _class codes_ by observing all of them in one place.
+- You will definitely need such a setup if you wish to use the [Parser](parser.md).
+
+## Further reading
+
+- [GlobalException _experienced_ section]()
+- [CustomizableException](customizable-exception.md)
+- [Parser](parser.md)

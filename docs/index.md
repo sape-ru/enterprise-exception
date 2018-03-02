@@ -1,1 +1,1 @@
-[EN](hde/en/contents.md)
+![English](hde/en/contents.md)

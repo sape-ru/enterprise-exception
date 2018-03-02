@@ -1,5 +1,7 @@
 # Basic usage
 
+(or the _dummies_ section)
+
 <span style="font-size: 70%;">
     <em>
         &laquo;As you know: 2 + 2 = 4
@@ -16,6 +18,6 @@ and inconveniences concerning exceptions were documented and discussed. Some bri
 
 ## Further reading
 
-1. [GlobalException](global-exception.md)
-1. [CustomizableException]()
-1. [Parser]()
+- [GlobalException](global-exception.md)
+- [CustomizableException](customizable-exception.md)
+- [Parser](parser.md)
