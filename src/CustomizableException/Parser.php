@@ -96,14 +96,16 @@ abstract class Parser
      *  * class_code_list_ex        => (array) [default: []] All classes but those with codes equal to the specified.
      *  * class_code_list_in        => (array) [default: []] Only classes with codes equal to the specified.
      *  * class_name_part_list_ex   => (array) [default: []] All classes but those with fully qualified names
-     *                                  containing the specified substrings.
+     *                                  containing the specified substrings (case sensitive).
      *  * class_name_part_list_in   => (array) [default: []] Only classes with fully qualified names
-     *                                  containing the specified substrings.
+     *                                  containing the specified substrings (case sensitive).
      *  * class_section_list_ex     => (array) [default: []] All classes but those with sections
      *                                  (CustomizableException::getClassSection()) equal to the specified;
+     *                                  case sensitive;
      *                                  doesn't work with the GlobalException descendants.
      *  * class_section_list_in     => (array) [default: []] Only classes with sections
      *                                  (CustomizableException::getClassSection()) equal to the specified;
+     *                                  case sensitive;
      *                                  doesn't work with the GlobalException descendants.
      *  * show_fe                   => (bool) [default: null] Filters exceptions by the 'show_fe' property:
      *                                  true  => exceptions with the 'show_fe' property equal to true;

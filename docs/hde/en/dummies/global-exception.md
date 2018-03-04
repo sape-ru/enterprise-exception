@@ -7,6 +7,7 @@ Contents:
 - [Solution](#solution)
 - [How it works](#how-it-works)
 - [Setup](#setup)
+- [Codes validation](#codes-validation)
 - [Further reading](#further-reading)
 
 ## Problem
@@ -103,6 +104,15 @@ Defining an abstract base exception class is not obligatory but there are reason
 - You can define the **CLASS_CODE_LIST** inside the _UserException_ and such a setup will work perfectly.
 But it is more convenient to control your exceptions _class codes_ by observing all of them in one place.
 - You will definitely need such a setup if you wish to use the [Parser](parser.md).
+
+## Codes validation
+
+Every _class code_ and _base code_ are validated during a _global code_ construction. By the way, you can construct a
+_global code_ manually by calling _getCodeGlobal()_. If any of the codes is considered invalid then a _base code_ is
+considered the only exception code and the globalization feature is disabled for that exception. Unless you read the
+[_experienced_ section]() you should consider these limits to keep your codes valid:
+- A _base code_ must be positive and less than **10000**.
+- A _class code_ must be positive and less than the value returned by _getCodeClassMax()_.
 
 ## Further reading
 
