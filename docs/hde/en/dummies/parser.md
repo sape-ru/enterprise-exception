@@ -28,8 +28,8 @@ exceptions in total (and counting). When you have so many exceptions (we also us
 duplicates.
 
 Also when we show to users an exception code only (a real message is hidden for front end) it is very great if our
-moderators can type an exception code, press a button and discover the real meaning so they can decide what to do next
-\- sometimes we hide real messages from users just because such exceptions describe internal politics restrictions.
+moderators can type an exception code, press a button and discover the real meaning so they can decide what to do
+next - sometimes we hide real messages from users just because such exceptions describe internal politics restrictions.
 
 Another reason is our user API. We would like to show there a list of possible exceptions codes and their messages.
 But such a list must contain FE-visible exceptions only. 
@@ -120,14 +120,180 @@ Secondly a potential _global code_ is generated via `GlobalException::getCodeGlo
 _base code_. If any other classes generate the same potential _global code_ (so dublicate _global codes_ are possible)
 then an exception is thrown.
 
-If you specify '_ignore_invalid_' option then no exception is thrown, the invalid classes are just skipped
-instead (inluding all their exceptions).
+If you specify '_add_errors_' or '_ignore_invalid_' option then no exception is thrown, the invalid classes are just
+skipped instead (inluding all their exceptions).
 
 ## Filtering exceptions
 
+Exceptions from [CustomizableException](customizable-exception.md) descendants only can be filtered.
+
+Almost every exception filter has suffixes _ex_ and _in_ meaning exceptions exclusion and inclusion accordingly.
+
+If you want to parse only exceptions with specific codes (_base codes_ if the exceptions' classes use
+[GlobalException](global-exception.md) functionality) use '_base_code_list_in_' filter. For instance
+`$filters['base_code_list_in'] = [11, 12, 14]` will make **Parser** to process only exceptions with their (_base_)
+codes **11**, **12** and **14**. Or if you want to parse every but the exceptions with (_base_) codes **11**, **12**
+and **14** then use '_base_code_list\_**ex**_' filter the same way.
+
+Also you can filter exceptions (_base_) codes by ranges (or just borders if you specify only "left" or "right"
+borders):
+- '_base_code_from_in_' - for the **in**clusion range start
+- '_base_code_from_ex_' - for the **ex**clusion range start
+- '_base_code_to_in_' - for the **in**clusion range end
+- '_base_code_to_ex_' - for the **ex**clusion range end
+
+There is also a property-related filter '_show_fe_'. If you want to generate a list of exceptions messages visible for
+users you can set '_show_fe_' to **true**. If you want the opposite list containing only exceptions messages which are
+not supposed to be seen by users then set '_show_fe_' to **false**.
+
+If you want to add some your own filters you should read the [_experienced_ section]() for instructions.
+
 ## Validating exceptions
 
+Exceptions validation is executed only for exceptions from [CustomizableException](customizable-exception.md)
+descendants with [GlobalException](global-exception.md) functionality enabled (`CLASS_CODE_LIST` element value is not
+equal to zero).
+
+Every exception (_base_) code is validated via `GlobalException::validateCodeClass()`. An exception is thrown if an
+exception (_base_) code is not valid.
+
+If you specify '_add_errors_' or '_ignore_invalid_' option then no exception is thrown, the invalid exceptions are just
+skipped instead.
+
 ## Data returned
+
+The returned data is based only on classes and exceptions which "survive" filtering and validation. Also the returned
+data first level keys depend on classes.
+
+If exceptions classes use [GlobalException](global-exception.md) functionality then all those exceptions data will be
+put in an array under '_\_\_global_' key. That array's elements will represent each _global exception_ with its
+_global code_ as a key:
+
+```php
+array (
+    '__global' => 
+    array (
+        100001 => // ...
+        100002 => // ...
+        // ...
+        // here comes codes from another global class:
+        200001 => // ...
+        200002 => // ...
+        // ...
+    ),
+    // ...
+```
+
+If exceptions classes doesn't use [GlobalException](global-exception.md) functionality then exceptions data will be
+put in an array under each exception class fully qualified name as a key. That array's elements will represent each
+exception in that class with its code as a key:
+
+```php
+array (
+    'MyCoolException' => 
+    array (
+        1  => // ...
+        2  => // ...
+        // ...
+    ),
+    'AnotherCoolException' =>
+    array ( // ...
+        100 => // ...
+        101 => // ...
+        200 => // ...
+    ),
+    // ...
+```
+
+None of these first level keys will exist in the returned data if '_no_data_' option is specified. It is useful
+when you want only to validate your _global_ exceptions.
+
+If you turn on '_add_errors_' option then [classes validation](#validating-classes) and
+[exceptions validation](#validating-exceptions) errors will be suppressed (like with '_ignore_invalid_' option) but
+those validation errors messages will be added to the returned data as an array under '_\_\_errors_' first level key:
+
+```php
+array (
+  // ...
+  '__errors' => 
+  array (
+    0 => 'The base code -5 for "MyCoolException" must range from 1 to 99999.',
+    1 => 'The base code 250000 for "AnotherCoolException" must range from 1 to 99999.',
+    2 => 'Same potential global code 500001 generated for "CrazyException" and "MadException".',
+    // ...
+  ),
+)
+```
+
+By default a parsed exception data is its system _full message_ based on '_context_' and '_message_' properties (see
+[CustomizableException setup](customizable-exception.md#setup) for more info).
+You can replace '_message_' substrings with '_message_fe_' substrings (if exist) by turning on '_use_message_fe_'
+option:
+
+```php
+array (
+  '__global' => 
+  array (
+    100001 => 'Something bad happened',
+    100002 => 'Upgrading a profile: not enough money', // has 'context' property
+     // the next exception has 'message_fe' property:
+    100003 => 'Please verify your email first', // is returned if 'use_message_fe' option is enabled
+    // and now the same exception without 'use_message_fe' option
+ // 100003 => 'The operation is forbidden for unreliable users',
+    // ...
+  ),
+  // ...
+)
+```
+
+If just exceptions messages isn't enough and you need all exceptions data then enable '_is_extended_' option:
+
+```php
+array (
+  '__global' => 
+  array (
+    100001 => 
+    array (
+      'base_code' => 1,
+      'class_code' => 1,
+      'class_name' => 'MyCoolException',
+      'class_section' => '',
+      'context' => '',
+      'message' => 'Something bad happened,
+      'message_fe' => '',
+      'show_fe' => false,
+    ),
+    100002 => 
+    array (
+      'base_code' => 2,
+      'class_code' => 1,
+      'class_name' => 'MyCoolException',
+      'class_section' => '',
+      'context' => 'Upgrading a profile',
+      'message' => 'not enough money',
+      'message_fe' => '',
+      'show_fe' => true,
+    ),
+    100003 => 
+    array (
+      'base_code' => 3,
+      'class_code' => 1,
+      'class_name' => 'MyCoolException',
+      'class_section' => '',
+      'context' => '=',
+      'message' => 'The operation is forbidden for unreliable users',
+      'message_fe' => 'Please verify your email first',
+      'show_fe' => true,
+    ),
+    // ...
+  ),
+  // ...
+)
+```
+
+There is also '_locale_' option wich is passed to the translation wrapper `CustomizableException::getL10N()` for each
+exception message part translation. Also you can change the output format entirely (or maybe add some more options to
+customize it). Visit the [_experienced_ section]() to know more about both topics.
 
 ## Further reading
 
