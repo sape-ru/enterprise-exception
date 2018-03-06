@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The CustomizableException class example.
+ * CustomizableException class example.
  *
  * @package CustomizableException\Examples
  */

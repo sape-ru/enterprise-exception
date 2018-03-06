@@ -60,7 +60,7 @@ Let's imagine, you have an exception class called _UserException_. You have an e
 users_" (_301_) and you don't want users to see it's real message.
 
 1. Make _UserException_ class extend **CustomizableException**.
-1. Specify exceptions properties in the **EXCEPTIONS_PROPERTIES** array:
+1. Specify exceptions properties in **EXCEPTIONS_PROPERTIES** array:
 ```php
 use MagicPush\EnterpriseException\CustomizableException\CustomizableException;
 
@@ -119,14 +119,14 @@ try {
 }
 ```
 
-The _getMessageFe()_ method checks if the exception property '_show\_fe_' equals **true**. If so it returns the same
+_getMessageFe()_ method checks if the exception property '_show\_fe_' equals **true**. If so it returns the same
 message you get when call _getMessage()_. Otherwise you'll get a replacement "_error XXX_" where _XXX_ is an exception
 code (it might be a _global code_ if you enable [GlobalException](global-exception.md) functionality).
 
 #### Frontend message replacement for a certain exception
 
-You might want to replace the **FORBIDDEN_UNRELIABLE** frontend message with something more specific. Specify the
-'_message\_fe_' property and turn on the '_show\_fe_' flag:
+You might want to replace **FORBIDDEN_UNRELIABLE** frontend message with something more specific. Specify
+'_message\_fe_' property and turn on '_show\_fe_' flag:
 ```php
 // ...
 
@@ -139,7 +139,7 @@ class UserException extends CustomizableException
         self::FORBIDDEN_UNRELIABLE => [
             'message'    => 'The operation is forbidden for unreliable users',
             'message_fe' => 'Please verify your email first', // frontend replacement for this exception only
-            'show_fe'    => true, // you can enable it now when the 'message_fe' property is specified
+            'show_fe'    => true, // you can enable it now when 'message_fe' property is specified
         ],
         // ...
     ];
@@ -184,7 +184,7 @@ But you also can create only one exception and then add different context in dif
 }
 ```
 
-But there is more! You can even specify the _default_ context (the '_context_' property) and redefine it during runtime
+But there is more! You can even specify the _default_ context ('_context_' property) and redefine it during runtime
 only if needed!
 ```php
 // ...

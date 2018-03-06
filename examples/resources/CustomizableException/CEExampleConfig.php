@@ -3,7 +3,7 @@
 use MagicPush\EnterpriseException\CustomizableException\CustomizableException;
 
 /**
- * The CustomizableException base class example.
+ * CustomizableException base class example.
  *
  * @package CustomizableException\Examples
  */
@@ -16,6 +16,6 @@ abstract class CEExampleConfig extends CustomizableException
 
     const CLASS_SECTION_DEFAULT = 'example'; // the default section
     const CLASS_SECTION_LIST    = [
-        CEExampleA::class => 'weee', // the custom section for the CEExampleA
+        CEExampleA::class => 'weee', // the custom section for CEExampleA
     ];
 }

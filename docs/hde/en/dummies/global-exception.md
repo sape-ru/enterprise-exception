@@ -39,7 +39,7 @@ exception.
 
 Of course there are other possible solutions for such a problem and there are other inconveniences caused by exceptions
 codes duplicates. But we wanted something universal that could handle many different problems by one common and more
-automated strategy... And here comes the _**GlobalException**_ solution.
+automated strategy... And here comes _**GlobalException**_ solution.
 
 ## Solution
 
@@ -72,7 +72,7 @@ different codes. For instance you can throw an exception "_No money - no honey!_
 this code (and other _UserException_ codes) become _global_...
 
 1. Create an abstract exception class for all your application exceptions. It must extend **GlobalException**.
-1. Define inside the constant array **CLASS_CODE_LIST** with the _UserException_ class as its element:
+1. Define inside the constant array **CLASS_CODE_LIST** with _UserException_ class as its element:
 ```php
 use MagicPush\EnterpriseException\GlobalException;
 
@@ -92,7 +92,7 @@ echo $e->getCodeBase(); // >> 5
 ```
 
 That's it! From this point every _UserException_ construction with _base codes_ from _1_ to _9999_ will create
-exceptions with _global codes_ from _4200001_ to _4299999_. Add more exception classes to the  **CLASS_CODE_LIST**,
+exceptions with _global codes_ from _4200001_ to _4299999_. Add more exception classes to **CLASS_CODE_LIST**,
 specify unique _class codes_ for each and all those classes will generate exceptions with unique codes!
 
 This repository contains an example script with a few classess configured. Just launch it in the CLI:
@@ -101,9 +101,9 @@ php examples/global.php
 ```
 
 Defining an abstract base exception class is not obligatory but there are reasons for it:
-- You can define the **CLASS_CODE_LIST** inside the _UserException_ and such a setup will work perfectly.
+- You can define **CLASS_CODE_LIST** inside _UserException_ and such a setup will work perfectly.
 But it is more convenient to control your exceptions _class codes_ by observing all of them in one place.
-- You will definitely need such a setup if you wish to use the [Parser](parser.md).
+- You will definitely need such a setup if you wish to use [Parser](parser.md).
 
 ## Codes validation
 

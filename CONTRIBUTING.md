@@ -16,13 +16,13 @@ You can freely create issues if you have some great ideas for improvement or new
 
 - Try to add an unambigous and certain title. Here are some examples:
     - Good :smile: :
-        - _Add an option %option_name_or_2-3-words_description% to the Parser_
-        - _Improve the Parser performance by %your_suggestion_in_2-3_words%_
+        - _Add an option %option_name_or_2-3-words_description% to Parser_
+        - _Improve Parser performance by %your_suggestion_in_2-3_words%_
         - _Objects construction bug_
         - _Grammar fix for %document_name_or_section%_
     - Bad :rage: :
-        - _Please add a new option to the Parser_
-        - _An idea how to improve the parser performance_
+        - _Please add a new option to Parser_
+        - _An idea how to improve Parser performance_
         - _WTF dude?!_
         - _I have a question_
 - Write as much detailed description as possible:

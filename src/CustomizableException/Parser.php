@@ -4,7 +4,7 @@ namespace MagicPush\EnterpriseException\CustomizableException;
 use MagicPush\EnterpriseException\GlobalException;
 
 /**
- * The Parser is used to parse the CustomizableException classes.
+ * Parser is used to parse CustomizableException classes.
  * Read the ::parse() documentation for more info.
  *
  * @see CustomizableException   For the customizable exceptions documentation.
@@ -17,32 +17,32 @@ use MagicPush\EnterpriseException\GlobalException;
 abstract class Parser
 {
     /**
-     * Parses CustomizableException classes and acts differently depending on the $options specified.
+     * Parses CustomizableException classes and acts differently depending on $options specified.
      *
-     * This method can parse exceptions only via extracting class names from the CLASS_CODE_LIST config
-     * which is set up in the $config_class_name class. Then it parses each class EXCEPTIONS_PROPERTIES config.
+     * This method can parse exceptions only via extracting class names from CLASS_CODE_LIST config
+     * which is set up in $config_class_name class. Then it parses each class EXCEPTIONS_PROPERTIES config.
      *
-     * Be warned that all classes (auto)loading is entirely up to you. You must load all classes being processed by the
-     * Parser before calling the ::parse().
-     * As an alternative you can redefine the ::loadClass() to load classes one by one on demand.
+     * Be warned that all classes (auto)loading is entirely up to you. You must load all classes being processed by
+     * Parser before calling ::parse().
+     * As an alternative you can redefine ::loadClass() to load classes one by one on demand.
      *
-     * This method makes several steps (also depending on the $options):
-     * 1. Loading. An exception class can be loaded via the ::loadClass() for further processing.
-     * 2. Filtering. If you want to validate and/or get only specific classes/exceptions then check the $filters
-     * description. Also not classess but exceptions filtering can be customized by redefining the
+     * This method makes several steps (also depending on $options):
+     * 1. Loading. An exception class can be loaded via ::loadClass() for further processing.
+     * 2. Filtering. If you want to validate and/or get only specific classes/exceptions then check $filters
+     * description. Also not classess but exceptions filtering can be customized by redefining
      * ::needFilterException() called after all built-in filters.
-     * 3. Validation. Every class and exception which is not filtered by the $filters and uses the GlobalException
+     * 3. Validation. Every class and exception which is not filtered by $filters and uses GlobalException
      * functionality (a class code is not equal to 0) is validated by several checks:
-     *      * A class code is validated via the GlobalException::validateCodeClass(). Then the possible global code is
-     *      generated via the GlobalException::getCodeGlobal(1) to check if any of already parsed classes can have
-     *      the same code. You can even validate the pure GlobalException descendants. But such classes will not
+     *      * A class code is validated via GlobalException::validateCodeClass(). Then the possible global code is
+     *      generated via GlobalException::getCodeGlobal(1) to check if any of already parsed classes can have
+     *      the same code. You can even validate pure GlobalException descendants. But such classes will not
      *      be parsed for the returned data array.
-     *      * An exception base code is validated via the ::GlobalException::validateCodeBase().
-     * 4. Preapring the returned data. An exception class data is read and added to the returned data array.
-     * Read the ::addExceptionData() documentation for returned array formats.
+     *      * An exception base code is validated via ::GlobalException::validateCodeBase().
+     * 4. Preparing the returned data. An exception class data is read and added to the returned data array.
+     * Read ::addExceptionData() documentation for returned array formats.
      *
      * @see CustomizableException                           For the customizable exceptions documentation.
-     * @see GlobalException::CLASS_CODE_LIST                For checking / setting up a class codes list for the Parser.
+     * @see GlobalException::CLASS_CODE_LIST                For checking / setting up a class codes list for the parser.
      * @see CustomizableException::EXCEPTIONS_PROPERTIES    For checking / setting up a class exceptions properties.
      * @see Parser::loadClass()                             For a single class (auto)loading.
      * @see Parser::needFilterException()                   For exceptions extra filtering.
@@ -55,28 +55,28 @@ abstract class Parser
      * @see CustomizableException::getL10N()                For the translation mechanism.
      * @see CustomizableException::getClassSection()        For the class section determination.
      *
-     * @param string $config_class_name The CustomizableException base subclass with the CLASS_CODE_LIST set up.
+     * @param string $config_class_name CustomizableException base subclass with CLASS_CODE_LIST set up.
      * @param array $options An array of parsing options. This method already supports the options:
      * <pre>
-     *  * add_errors        => (bool) [default: false] If the Parser should act like the 'ignore_invalid' option is
+     *  * add_errors        => (bool) [default: false] If the parser should act like 'ignore_invalid' option is
      *                          turned on but also add validations errors messages to the output
-     *                          under the '__errors' 1-level key.
-     *  * ignore_invalid    => (bool) [default: false] If the Parser should suppress validations errors and ignore
+     *                          under '__errors' 1-level key.
+     *  * ignore_invalid    => (bool) [default: false] If the parser should suppress validations errors and ignore
      *                          (not to add to the returned data) invalid classes and exceptions;
      *                          might be useful if you output the returned data to frontend interfaces (to show as much
      *                          as possible without a page crash due to a validation error being thrown).
      *  * is_extended       => (bool) [default: false] Controls the returned array formats;
-     *                          read the 'return' documentation for more info.
+     *                          read 'return' documentation for more info.
      *  * locale            => (string) [default: $config_class_name::L10N_SYSTEM_LOCALE - the system locale]
      *                          Controls exceptions string-type properties translation via
-     *                          the CustomizableException::getL10N();
-     *                          read the ::addExceptionData() to know which exception properties are translated.
-     *  * no_data           => (bool) [default: false] If the Parser should return an empty array instead of storing
+     *                          CustomizableException::getL10N();
+     *                          read ::addExceptionData() to know which exception properties are translated.
+     *  * no_data           => (bool) [default: false] If the parser should return an empty array instead of storing
      *                          exceptions classes data;
      *                          useful if you want just to validate exceptions and not to occupy memory.
-     *  * use_message_fe    => (bool) [default: false] If the Parser should return the 'message_fe' property
-     *                          from a class EXCEPTIONS_PROPERTIES config instead of the 'message' property;
-     *                          is ignored if the 'is_extended' option equals to true.
+     *  * use_message_fe    => (bool) [default: false] If the parser should return 'message_fe' property
+     *                          from a class EXCEPTIONS_PROPERTIES config instead of 'message' property;
+     *                          is ignored if 'is_extended' option equals to true.
      * </pre>
      * @param array $filters An array of filters. Filters with default values are considered disabled. The filters
      * names suffixes stand for: 'ex' - exclude, 'in' - include. The "base" codes might be considered as standard full
@@ -102,20 +102,20 @@ abstract class Parser
      *  * class_section_list_ex     => (array) [default: []] All classes but those with sections
      *                                  (CustomizableException::getClassSection()) equal to the specified;
      *                                  case sensitive;
-     *                                  doesn't work with the GlobalException descendants.
+     *                                  doesn't work with GlobalException descendants.
      *  * class_section_list_in     => (array) [default: []] Only classes with sections
      *                                  (CustomizableException::getClassSection()) equal to the specified;
      *                                  case sensitive;
-     *                                  doesn't work with the GlobalException descendants.
-     *  * show_fe                   => (bool) [default: null] Filters exceptions by the 'show_fe' property:
-     *                                  true  => exceptions with the 'show_fe' property equal to true;
-     *                                  false => exceptions with the 'show_fe' property missing or equal to false.
+     *                                  doesn't work with GlobalException descendants.
+     *  * show_fe                   => (bool) [default: null] Filters exceptions by 'show_fe' property:
+     *                                  true  => exceptions with 'show_fe' property equal to true;
+     *                                  false => exceptions with 'show_fe' property missing or equal to false.
      * </pre>
      *
-     * @return array The parsed data composed by the ::addExceptionData().
+     * @return array The parsed data composed by ::addExceptionData().
      *
-     * @throws \Exception   if the $config_class_name is not loaded.
-     * @throws \Exception   if the $config_class_name is not a subclass of the CustomizableException.
+     * @throws \Exception   if $config_class_name is not loaded.
+     * @throws \Exception   if $config_class_name is not a subclass of CustomizableException.
      * @throws \Exception   if a class code is not valid (GlobalException::validateCodeClass()).
      * @throws \Exception   if two exception classes can generate identical global codes
      *                      (GlobalException::getCodeGlobal(1)).
@@ -390,36 +390,36 @@ abstract class Parser
 
 
     /**
-     * Updates the $parsed_data array with the next exception data.
+     * Updates $parsed_data array with the next exception data.
      *
-     * The $parsed_data array always has two levels. The first level key can be:
-     * * '__global' - for classes using the GlobalException globalization feature;
+     * $parsed_data array always has two levels. The first level key can be:
+     * * '__global' - for classes using GlobalException functionality;
      * * a class fully qualified name - for other classes (a class code is always equal to 0 in this case);
-     * * '__errors' - if the $options['add_erros'] equals true and there are validations errors encountered.
+     * * '__errors' - if $options['add_erros'] equals true and there are validations errors encountered.
      *
-     * The second level key is an exception (global) code (which you get via the \Exception::getCode()).
+     * The second level key is an exception (global) code (which you get via \Exception::getCode()).
      *
-     * Initially the data stored under the second level key depends on the $options['is_extended']. If this option
+     * Initially the data stored under the second level key depends on $options['is_extended']. If this option
      * equals false then the stored value is an exception full message composed via
-     * the CustomizableException::getMessageComposed().
+     * CustomizableException::getMessageComposed().
      * Otherwise the stored value is an aray of the data:
      * <pre>
-     * * base_code      => (int) An exception base code (the $basis['base_code']); can equal to the second level key
+     * * base_code      => (int) An exception base code ($basis['base_code']); can equal to the second level key
      *                      if the globalization feature is disabled for that exception class.
-     * * class_code     => (int) An exception class code (the $basis['class_code']).
-     * * class_name     => (string) An exception class fully qualified name (the $basis['class_name']).
-     * * class_section  => (string) An exception class section (the CustomizableException::getClassSection()).
+     * * class_code     => (int) An exception class code ($basis['class_code']).
+     * * class_name     => (string) An exception class fully qualified name ($basis['class_name']).
+     * * class_section  => (string) An exception class section (CustomizableException::getClassSection()).
      * * context        => (string) An exception default contex,
-     *                      the 'context' CustomizableException::EXCEPTIONS_PROPERTIES config property;
-     *                      is translated via the CustomizableException::getL10N().
+     *                      'context' CustomizableException::EXCEPTIONS_PROPERTIES config property;
+     *                      is translated via CustomizableException::getL10N().
      * * message        => (string) An exception base message,
-     *                      the 'message' CustomizableException::EXCEPTIONS_PROPERTIES config property;
-     *                      is translated via the CustomizableException::getL10N().
+     *                      'message' CustomizableException::EXCEPTIONS_PROPERTIES config property;
+     *                      is translated via CustomizableException::getL10N().
      * * message_fe     => (string) An exception frontend base message,
-     *                      the 'message_fe' CustomizableException::EXCEPTIONS_PROPERTIES config property;
-     *                      is translated via the CustomizableException::getL10N().
+     *                      'message_fe' CustomizableException::EXCEPTIONS_PROPERTIES config property;
+     *                      is translated via CustomizableException::getL10N().
      * * show_fe        => (bool) An exception flag which allows to show the real message in frontend interfaces,
-     *                      the 'show_fe' CustomizableException::EXCEPTIONS_PROPERTIES config property.
+     *                      'show_fe' CustomizableException::EXCEPTIONS_PROPERTIES config property.
      * </pre>
      *
      * You can add your own functionality by redefining this method. But be warned that you must call the parent
@@ -433,8 +433,8 @@ abstract class Parser
      * @see CustomizableException::EXCEPTIONS_PROPERTIES    For checking / setting up a class exceptions properties.
      * @see CustomizableException::getL10N()                For the translation mechanism.
      *
-     * @param array $parsed_data The array returned by the ::parse() in the end. Passed by a reference.
-     * @param array $options The array of options, one of the ::parse() arguments. Passed by a reference.
+     * @param array $parsed_data The array returned by ::parse() in the end. Passed by a reference.
+     * @param array $options The array of options, one of ::parse() arguments. Passed by a reference.
      * @param array $properties The array of an exception EXCEPTIONS_PROPERTIES config. Passed by a reference.
      * @param array $basis An array of an exception basis. This array is critical for this method functioning but
      * not accompanied with its validations for optimization purpose. It is your job to ensure that all needed elements
@@ -485,9 +485,9 @@ abstract class Parser
     }
 
     /**
-     * Loads the $class_name for further Parser processing.
+     * Loads $class_name for further Parser processing.
      *
-     * This method is called in the ::parse() for each class before its usage.
+     * This method is called in ::parse() for each class before its usage.
      *
      * Initially it is a stub which does nothing.
      * You can redefine it if you wish to load your exception classes one by one.
@@ -508,7 +508,7 @@ abstract class Parser
     /**
      * Returns an answer to the question: "Will this exception be excluded by a filter from the parsed data?".
      *
-     * This method is called for each exception after all built-in filters in the ::parse().
+     * This method is called for each exception after all built-in filters in ::parse().
      *
      * Initially this is a stub which always returns false.
      * You can redefine it to add any filtering rules you desire.
@@ -517,7 +517,7 @@ abstract class Parser
      * @see GlobalException                                 For the global exceptions documentation.
      * @see CustomizableException::EXCEPTIONS_PROPERTIES    For checking / setting up a class exceptions properties.
      *
-     * @param array $filters The array of filters, one of the ::parse() arguments. Passed by a reference.
+     * @param array $filters The array of filters, one of ::parse() arguments. Passed by a reference.
      * @param int $base_code An exception base (or full when not global) code.
      * @param array $properties The array of an exception EXCEPTIONS_PROPERTIES config. Passed by a reference.
      *

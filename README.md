@@ -21,7 +21,7 @@ For instance your project has exception classes with identical exceptions codes:
 - class _BillingException_ can throw the exception "not enough money" with the same code **2**.
 
 And you want those codes become unique so you could differ those exceptions while parsing logs. Or it would be handy
-for your API clients' robots. If this is your case then use the [GlobalException](#for-codes-globalization).
+for your API clients' robots. If this is your case then use [GlobalException](#for-codes-globalization).
 
 ### Exceptions customization
 
@@ -30,19 +30,19 @@ for your API clients' robots. If this is your case then use the [GlobalException
 with the error XXXXXX_" for low-level exceptions?
 - Do you want to add any other custom properties to your exceptions and handle them as you wish?
 
-If you answered "yes" for any question then you probably would like to use the
+If you answered "yes" for any question then you probably would like to use
 [CustomizableException](#for-exceptions-customization).
 
 ### Customized exceptions parsing
 
-If you already use the
+If you already use
 [CustomizableException](#exceptions-customization) and have dozens of customizable exception classes then you probably
 would like to:
 - print a full list of your exceptions with their properties
 - filter your exceptions (for instance to show only user-visible exceptions)
 - validate your globalized exceptions codes
 
-If so then you should use the [Parser](#for-customizable-exceptions-parsing).
+If so then you should use [Parser](#for-customizable-exceptions-parsing).
 
 ## Requirements
 - Core PHP v7.0+
@@ -58,9 +58,9 @@ composer require magic-push/enterprise-exception
 - GIT: clone / fork / the repository, include as submodule etc.
 - Manual #1: Download the repository :smile:.
 - Manual #2 (your tasks related source only):
-    - Download the [GlobalException.php](src/GlobalException.php) file for the exceptions codes globalization
+    - Download [GlobalException.php](src/GlobalException.php) file for the exceptions codes globalization
     feature.
-    - Download the file previously mentioned and the [CustomizableException](src/CustomizableException) folder for
+    - Download the file previously mentioned and [CustomizableException](src/CustomizableException) folder for
     exceptions customizing and parsing functionality.
 
 ## Usage or HOWTO lite edition
@@ -80,7 +80,7 @@ The short usage guide is:
 
 1. Your base exception class must extend [GlobalException](src/GlobalException.php).
 1. The classes you want to globalize must extend your base exception class (previously mentioned).
-1. You must redefine the **CLASS_CODE_LIST** constant array in your base exception class with your exception classes
+1. You must redefine **CLASS_CODE_LIST** constant array in your base exception class with your exception classes
 fully qualified names as keys and their own (class) codes as values.
 1. That's it! Now your exceptions have unique codes!
 
@@ -91,7 +91,7 @@ But for a start:
 
 1. Your base exception class must extend [CustomizableException](src/CustomizableException/CustomizableException.php).
 1. All the classes you want customizable exceptions for must extend your base exception class (previously mentioned).
-1. You must redefine the **EXCEPTIONS_PROPERTIES** constant array in each class you want customize exceptions for.
+1. You must redefine **EXCEPTIONS_PROPERTIES** constant array in each class you want customize exceptions for.
 See the array PHPDoc for possible keys.
 1. At this moment you must throw your exceptions with a new constructor signature: an exception code must be the first
 parameter (obligatory). If the first parameter is _not_ numeric/specified then the customization config will be ignored.
@@ -100,10 +100,10 @@ parameter (obligatory). If the first parameter is _not_ numeric/specified then t
 ### For customizable exceptions parsing
 
 1. Do all the things for [exceptions customization](#for-exceptions-customization).
-1. You must mention all the classes you want to be parsed in the **CLASS_CODE_LIST** constant array in your base
+1. You must mention all the classes you want to be parsed in **CLASS_CODE_LIST** constant array in your base
 exception class. Like for the [globalization](#for-codes-globalization), but you can specify **0** for class codes if
 you don't want to use the globalization feature itself.
-1. Call the [Parser](src/CustomizableException/Parser.php)::parse() method with options and/or filters you desire!
+1. Call [Parser](src/CustomizableException/Parser.php)::parse() method with options and/or filters you desire!
 
 ## Near future plans
 

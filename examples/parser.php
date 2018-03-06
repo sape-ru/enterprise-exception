@@ -10,7 +10,7 @@ use MagicPush\EnterpriseException\CustomizableException\Parser;
 
 try {
     $section_to_include = 'weee';
-    echo "...CustomizableException\ExceptionConfig exceptions with the '$section_to_include' "
+    echo "...CustomizableException\ExceptionConfig exceptions with '$section_to_include' "
         . "section only (short format):\n";
     echo var_export(
             Parser::parse(CEExampleConfig::class, [], ['class_section_list_in' => [$section_to_include]]),

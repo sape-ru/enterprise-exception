@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The GlobalException class example.
+ * GlobalException class example.
  *
  * @package Examples\GlobalException
  */

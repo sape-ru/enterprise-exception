@@ -22,7 +22,7 @@ And here goes the history itself...
 - [GlobalException](src/GlobalException.php)::**getCodeClassMax()** public method
 for the biggest class code public access.
 - [Parser](src/CustomizableException/Parser.php)::**parse()** new option '_add_errors_' - to suppress validations errors
-(like '_ignore_invalid_' option) and also add those errors messages to the output under the '_\_\_errors_' key.
+(like '_ignore_invalid_' option) and also add those errors messages to the output under '_\_\_errors_' key.
 
 #### Fixes:
 
