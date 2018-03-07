@@ -102,7 +102,7 @@ abstract class GlobalException extends \Exception
      *
      * @return int the biggest class code possible
      */
-    public static final function getCodeClassMax(): int
+    final public static function getCodeClassMax(): int
     {
         return intval(floor(static::GLOBAL_CODE_MAX_RELATIVE / static::CLASS_CODE_MULTIPLIER) - 1);
     }
