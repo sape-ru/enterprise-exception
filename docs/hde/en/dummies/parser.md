@@ -154,7 +154,7 @@ Exceptions validation is executed only for exceptions from [CustomizableExceptio
 descendants with [GlobalException](global-exception.md) functionality enabled (`CLASS_CODE_LIST` element value is not
 equal to zero).
 
-Every exception (_base_) code is validated via `GlobalException::validateCodeClass()`. An exception is thrown if an
+Every exception (_base_) code is validated via `GlobalException::validateCodeBase()`. An exception is thrown if an
 exception (_base_) code is not valid.
 
 If you specify '_add_errors_' or '_ignore_invalid_' option then no exception is thrown, the invalid exceptions are just

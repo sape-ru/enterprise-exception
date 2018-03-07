@@ -111,7 +111,7 @@ Every _class code_ and _base code_ are validated during a _global code_ construc
 _global code_ manually by calling _getCodeGlobal()_. If any of the codes is considered invalid then a _base code_ is
 considered the only exception code and the globalization feature is disabled for that exception. Unless you read the
 [_experienced_ section]() you should consider these limits to keep your codes valid:
-- A _base code_ must be positive and less than **10000**.
+- A _base code_ must be positive and less than **100000**.
 - A _class code_ must be positive and less than the value returned by _getCodeClassMax()_.
 
 ## Further reading
