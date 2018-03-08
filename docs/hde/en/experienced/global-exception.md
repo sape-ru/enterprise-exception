@@ -8,6 +8,8 @@ complicated cases and their possible solutions.
 Contents:
 - [Inadecuate base code maximum](#inadecuate-base-code-maximum)
 - [Global code application limit](#global-code-application-limit)
+- [Global exceptions from another world](#global-exceptions-from-another-world)
+- [Global codes formatting](#global-codes-formatting)
 
 ## Inadecuate base code maximum
 
@@ -109,6 +111,46 @@ class MyAppOrAPIBaseException extends GlobalException
 Then if you don't alter `CLASS_CODE_MULTIPLIER` your _class code_ maximum will be **21473**. If you throw an
 exception with the _base code_ **99999** you will get the _global code_ **2147399999** wich is definitely less than
 32-bit signed integer maximum (**2147483647**).
+
+## Global exceptions from another world
+
+It's great when only your application uses [GlobalException](../dummies/global-exception.md)! But when your partner
+external application API starts using the same globalization library at some moment (depending on your
+`CLASS_CODE_MULTIPLIER` and `GLOBAL_CODE_MAX_RELATIVE` values) you can not treat that external API exceptions codes
+as _base codes_. You must treat those as _global codes_ and create your
+[GlobalException](../dummies/global-exception.md) objects accordingly (especially if you also use
+[CustomizableException](../dummies/customizable-exception.md) functionality).
+
+### Solution
+
+Let's imagine a scenario when you can be certain about the _class codes_ that external application API uses to generate
+its global exceptions. For instance the API can return codes in range from **1100001** to **1599999** (_class codes_
+range from **11** to **15**, the same `CLASS_CODE_MULTIPLIER` is equal to **100000**).
+
+1. Create five new exceptions classes (for each possible _class code_), update your `CLASS_CODE_LIST` accordingly by
+adding five new _class codes_.
+1. Generate a flipped version of your `CLASS_CODE_LIST` so you can find a class name by its _class code_.
+1. Decompile incoming _global codes_ from the external API via `getCodeParts()` - this method returns an array with
+_class_ and _base_ codes separated.
+1. Construct your global exception - pick a class name by the extracted _class code_ and call its constructor passing
+the extracted _base code_.
+
+### The worst scenario
+
+Just imagine if two or more external API start using [GlobalException](../dummies/global-exception.md) and can
+return identical _global codes_ with different meanings. And you can not convince any of their developers to change
+_class codes_. Also you can't afford treating those codes as _base_ because of those integers size.
+
+For now there is no solution [GlobalException](../dummies/global-exception.md) can provide you with... But maybe
+**you** can suggest a nice strategy or the library improvement!
+
+## Global codes formatting
+
+If you want to print a formatted _global code_ then redefine and use `getCodeFormatted()` static method.
+
+Initially this method returns just a _global code_ itself and accepts a _base code_ as the only parameter. Also this
+method is called in `CustomizableException::getMessageDefault()` and `CustomizableException::getMessageFeStub()`
+methods (read [Mastering CustomizableException]() for more info).
 
 ## Further reading
 

@@ -100,6 +100,8 @@ This repository contains an example script with a few classess configured. Just 
 php examples/global.php
 ```
 
+For manual _global codes_ calculation you can call `getCodeGlobal()` static method directly.
+
 Defining an abstract base exception class is not obligatory but there are reasons for it:
 - You can define **CLASS_CODE_LIST** inside _UserException_ and such a setup will work perfectly.
 But it is more convenient to control your exceptions _class codes_ by observing all of them in one place.
