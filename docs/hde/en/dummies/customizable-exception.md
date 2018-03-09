@@ -15,8 +15,11 @@ Contents:
 - [Problem](#problem)
 - [Solution](#solution)
 - [How it works](#how-it-works)
+    - [If you upgrade your old exceptions](#if-you-upgrade-your-old-exceptions)
 - [Setup](#setup)
-- [Further reading](#further-reading)
+    - [Frontend message replacement for a certain exception](#frontend-message-replacement-for-a-certain-exception)
+    - [Exception context](#exception-context)
+    - [Overview example script](#overview-example-script)
 
 ## Problem
 
@@ -49,9 +52,20 @@ so you don't pass it to a constructor anymore. Instead you can specify exception
 with the data determined during runtime that you find useful - it is added to a constant _base message_:
 
 ```
-$e = new UserException(1, 'my_details');
-echo $e->getMessage(); // >> 'base message (my_details)'
+$e = new UserException(1, 'my details');
+echo $e->getMessage(); // >> 'base message (my details)'
 ```
+
+### If you upgrade your old exceptions
+
+For instance your application has dozens of exceptions classes already and you don't want to rewrite all of those at
+once to fit **CustomizableException** constructor requirements. Probably you would like to change your exceptions
+classes parent to the base class which extends **CustomizableException** one ny one...
+
+**CustomizableException** provides you with the dual-mode constructor. If you pass a non-numeric value as the first
+argument the constructor will operate like for classic **Exception** (or [GlobalException](global-exception.md)). And
+only if you pass a _numeric_ value as the first argument it will be treated as an exception (_base_) code and the
+second argument will be treated as exception's _details_.
 
 ## Setup
 
@@ -159,7 +173,7 @@ try {
 }
 ```
 
-#### Context
+#### Exception context
 
 Sometimes you want to add a substring to an exception message describing the circumstances an exception was thrown.
 For instance you have two "no money" exceptions with similar messages. But one exception is thrown if a user wants
