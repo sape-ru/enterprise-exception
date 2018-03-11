@@ -58,14 +58,15 @@ echo $e->getMessage(); // >> 'base message (my details)'
 
 ### If you upgrade your old exceptions
 
-For instance your application has dozens of exceptions classes already and you don't want to rewrite all of those at
-once to fit **CustomizableException** constructor requirements. Probably you would like to change your exceptions
-classes parent to the base class which extends **CustomizableException** one ny one...
+For instance your application has dozens of exceptions classes which extend your app base exception class already and
+you don't want to rewrite all of those at once to fit **CustomizableException** constructor requirements. Probably you
+would like to adapt your exception classes one ny one...
 
-**CustomizableException** provides you with the dual-mode constructor. If you pass a non-numeric value as the first
-argument the constructor will operate like for classic **Exception** (or [GlobalException](global-exception.md)). And
-only if you pass a _numeric_ value as the first argument it will be treated as an exception (_base_) code and the
-second argument will be treated as exception's _details_.
+No worries! You can set **CustomizableException** as your base exception class' parent immediately without any
+trouble - **CustomizableException** provides you with the dual-mode constructor. If you pass a non-numeric value as the
+first argument the constructor will operate like for classic **Exception** (or [GlobalException](global-exception.md)).
+And only if you pass a _numeric_ value as the first argument it will be treated as an exception (_base_) code, the
+second argument will be treated as exception's _details_ and the exception properties will be used (if exist).
 
 ## Setup
 
