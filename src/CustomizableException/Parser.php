@@ -440,7 +440,7 @@ abstract class Parser
      * not accompanied with its validations for optimization purpose. It is your job to ensure that all needed elements
      * are specified here if you decide to call this method explicitly anywhere else. The array includes:
      * <pre>
-     * * base_code  => (int) an exception code (validated already)
+     * * base_code  => (int) an exception base code (validated already)
      * * class_code => (int) an exception class code (validated already)
      * * class_name => (string) a fully qualified exception class name (not blank)
      * </pre>

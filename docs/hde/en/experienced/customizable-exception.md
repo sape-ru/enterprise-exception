@@ -6,6 +6,9 @@
 This article describes some ways of tweaking [CustomizableException](../dummies/customizable-exception.md).
 If you're not familiar with the library basics then [go read it](../dummies/about.md) first!
 
+Firstly take into your consideration that in addition to already built-in properties you can expand
+`EXCEPTIONS_PROPERTIES` with as many new properties as you wish!
+
 Contents:
 - [Full message composer](#full-message-composer)
 - [Frontend message stub](#frontend-message-stub)
