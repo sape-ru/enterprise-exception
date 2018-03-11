@@ -289,8 +289,6 @@ abstract class CustomizableException extends GlobalException
      *
      * Initially this method is called in the constructor if an exception 'message' property
      * is not specified in EXCEPTIONS_PROPERTIES.
-     * Also the returned message is considered as the system version of an exception message
-     * (and that no translation is needed).
      *
      * Initially the returned message contains the calling class name and its base and global codes
      * (identical if GlobalException feature is not used for the calling class).
@@ -319,8 +317,6 @@ abstract class CustomizableException extends GlobalException
      *
      * Initially this method is called in the constructor if EXCEPTIONS_PROPERTIES config doesn't have the key
      * equal to $base_code.
-     * Also the returned message is considered as the system version of an exception message
-     * (and that no translation is needed).
      *
      * Initially the returned message contains $base_code and the calling class name.
      *
@@ -384,15 +380,12 @@ abstract class CustomizableException extends GlobalException
      * Step 2. Checking EXCEPTIONS_PROPERTIES.
      *
      * If the exception properties are missing (EXCEPTIONS_PROPERTIES key equal to $base_code is not found)
-     * then $\_message_base property gets ::getMessageUnknown() value. Also this message will not be
-     * processed via ::getL10N() with L10N_SYSTEM_LOCALE (assuming that it was already processed properly
-     * in ::getMessageUnknown()).
+     * then $\_message_base property gets ::getMessageUnknown() value.
      *
      * If the exception properties are found 'context' config property is stored in $\_context property.
      *
      * If 'message' config property is missing then $\_message_base property gets ::getMessageDefault()
-     * value. Also this message will not be processed via ::getL10N() with L10N_SYSTEM_LOCALE
-     * (assuming that it was already processed properly in ::getMessageDefault()).
+     * value.
      *
      * If 'message' config property is not empty then this 'message' value is stored in $\_message_base
      * property. 'show_fe' config property is stored in $\_show_fe in this case only. It can be accessed by

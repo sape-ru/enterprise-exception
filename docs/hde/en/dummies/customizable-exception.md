@@ -134,9 +134,10 @@ try {
 }
 ```
 
-_getMessageFe()_ method checks if the exception property '_show\_fe_' equals **true**. If so it returns the same
-message you get when call _getMessage()_. Otherwise you'll get a replacement "_error XXX_" where _XXX_ is an exception
-code (it might be a _global code_ if you enable [GlobalException](global-exception.md) functionality).
+_getMessageFe()_ method checks if the exception property '_show\_fe_' (in fact the value returned by `canShowFe()`)
+equals **true**. If so it returns the same message you get when call _getMessage()_. Otherwise you'll get a replacement
+"_error XXX_" where _XXX_ is an exception code (it might be a _global code_ if you enable
+[GlobalException](global-exception.md) functionality).
 
 #### Frontend message replacement for a certain exception
 
