@@ -1,9 +1,9 @@
 # Mastering GlobalException
 
-(browse code: [src/GlobalException](../../../../src/GlobalException.php))
+(source: [src/GlobalException.php](../../../../src/GlobalException.php))
 
 Sometimes you need more flexibility with [GlobalException](../dummies/global-exception.md). This article describes some
-complicated cases and their possible solutions.
+unordinary cases and their possible solutions.
 
 Contents:
 - [Inadecuate base code maximum](#inadecuate-base-code-maximum)
@@ -99,7 +99,7 @@ to `PHP_INT_MAX` but you can change it to fit your application limits. For the e
 the limit to 32-bit signed integer maximum:
 
 ```php
-// All your exceptions classes used in your application API must extend this class:
+// All your exception classes used in your application API must extend this class:
 class MyAppOrAPIBaseException extends GlobalException
 {
     // ...
@@ -127,7 +127,7 @@ Let's imagine a scenario when you can be certain about the _class codes_ that ex
 its global exceptions. For instance the API can return codes in range from **1100001** to **1599999** (_class codes_
 range from **11** to **15**, the same `CLASS_CODE_MULTIPLIER` is equal to **100000**).
 
-1. Create five new exceptions classes (for each possible _class code_), update your `CLASS_CODE_LIST` accordingly by
+1. Create five new exception classes (for each possible _class code_), update your `CLASS_CODE_LIST` accordingly by
 adding five new _class codes_.
 1. Generate a flipped version of your `CLASS_CODE_LIST` so you can find a class name by its _class code_.
 1. Decompile incoming _global codes_ from the external API via `getCodeParts()` - this method returns an array with

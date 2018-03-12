@@ -29,7 +29,7 @@ abstract class Parser
      * This method makes several steps (also depending on $options):
      * 1. Loading. An exception class can be loaded via ::loadClass() for further processing.
      * 2. Filtering. If you want to validate and/or get only specific classes/exceptions then check $filters
-     * description. Also not classess but exceptions filtering can be customized by redefining
+     * description. Also not classes but exceptions filtering can be customized by redefining
      * ::needFilterException() called after all built-in filters.
      * 3. Validation. Every class and exception which is not filtered by $filters and uses GlobalException
      * functionality (a class code is not equal to 0) is validated by several checks:
@@ -72,7 +72,7 @@ abstract class Parser
      *                          CustomizableException::getL10N();
      *                          read ::addExceptionData() to know which exception properties are translated.
      *  * no_data           => (bool) [default: false] If the parser should return an empty array instead of storing
-     *                          exceptions classes data;
+     *                          exception classes data;
      *                          useful if you want just to validate exceptions and not to occupy memory.
      *  * use_message_fe    => (bool) [default: false] If the parser should return 'message_fe' property
      *                          from a class EXCEPTIONS_PROPERTIES config instead of 'message' property;

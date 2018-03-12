@@ -15,12 +15,12 @@ use MagicPush\EnterpriseException\GlobalException;
  * CLASS_SECTION_LIST and CLASS_SECTION_DEFAULT are an addition to let Parser filtrate classes by sections
  * (read Parser documentation in its own class file).
  *
- * You must extend this class with your project base exception class (PBEC). All your exceptions classes must extend
+ * You must extend this class with your project base exception class (PBEC). All your exception classes must extend
  * that PBEC and have their EXCEPTIONS_PROPERTIES configs set up properly. After that you must call the constructor
  * in customizable mode - via passing exception (base) code as the first argument. Otherwise this class will act
  * like the classic \Exception class.
  *
- * Also if you want to use exceptions codes globalization feature or parse your exceptions classes then set up
+ * Also if you want to use exceptions codes globalization feature or parse your exception classes then set up
  * CLASS_CODE_LIST config in PBEC (read GlobalException and Parser documentation for more info).
  *
  * @see CustomizableException::EXCEPTIONS_PROPERTIES    For checking / setting up the exceptions properties config.
@@ -49,7 +49,7 @@ abstract class CustomizableException extends GlobalException
     /**
      * @var array|string[] Parser sections filter config.
      *
-     * This config is used by Parser to filter exceptions classes by sections you can set.
+     * This config is used by Parser to filter exception classes by sections you can set.
      * Each element of the config represents an exception class (a subclass of CustomizableException).
      * The element key must be a fully qualified class name (AnyClass::class) or it will be ignored -
      * not found while comparing with a fully qualified class name being checked for filtering.

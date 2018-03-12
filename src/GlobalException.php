@@ -5,8 +5,8 @@ namespace MagicPush\EnterpriseException;
  * The exception class used for globalizing exceptions' codes.
  *
  * Will globalize its codes only after CLASS_CODE_LIST config is set properly. You must extend this class with
- * your project base exception class (PBEC) and set up the config there mentioning all exceptions classes you want
- * to globalize (and all those exceptions classes must be subclasses of PBEC).
+ * your project base exception class (PBEC) and set up the config there mentioning all exception classes you want
+ * to globalize (and all those exception classes must be subclasses of PBEC).
  *
  * Also this class can be used and act like the classic \Exception if you don't set up CLASS_CODE_LIST config.
  *

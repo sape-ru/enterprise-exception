@@ -1,6 +1,6 @@
 # CustomizableException
 
-(browse:
+(source:
 [src/CustomizableException/CustomizableException.php](../../../../src/CustomizableException/CustomizableException.php))
 
 **CustomizableException** can solve many problems (it is called _customizable_ for a reason). One of possible problems
@@ -51,14 +51,14 @@ An exception message becomes one of its properties (also is reffered as the _bas
 so you don't pass it to a constructor anymore. Instead you can specify exception _details_ - an optional substring
 with the data determined during runtime that you find useful - it is added to a constant _base message_:
 
-```
+```php
 $e = new UserException(1, 'my details');
 echo $e->getMessage(); // >> 'base message (my details)'
 ```
 
 ### If you upgrade your old exceptions
 
-For instance your application has dozens of exceptions classes which extend your app base exception class already and
+For instance your application has dozens of exception classes which extend your app base exception class already and
 you don't want to rewrite all of those at once to fit **CustomizableException** constructor requirements. Probably you
 would like to adapt your exception classes one ny one...
 
@@ -76,73 +76,82 @@ users_" (_301_) and you don't want users to see it's real message.
 
 1. Make _UserException_ class extend **CustomizableException**.
 1. Specify exceptions properties in **EXCEPTIONS_PROPERTIES** array:
-```php
-use MagicPush\EnterpriseException\CustomizableException\CustomizableException;
 
-class UserException extends CustomizableException
-{
-    const NOT_ENOUGH_MONEY     = 12;
-    const FORBIDDEN_UNRELIABLE = 301;
+    ```php
+    use MagicPush\EnterpriseException\CustomizableException\CustomizableException;
+    
+    class UserException extends CustomizableException
+    {
+        const NOT_ENOUGH_MONEY     = 12;
+        const FORBIDDEN_UNRELIABLE = 301;
+    
+        const EXCEPTIONS_PROPERTIES = [ // that's the central config of your exceptions customization
+            self::NOT_ENOUGH_MONEY     => [
+                'message' => 'Not enough money',
+                'show_fe' => true, // "FE" stands for "Front End"; controls if a user can see a real message
+            ],
+            self::FORBIDDEN_UNRELIABLE => [
+                'message' => 'The operation is forbidden for unreliable users',
+                'show_fe' => false,' // may be ommitted because it's the default behavior
+            ],
+        ];
+    }
+    ```
 
-    const EXCEPTIONS_PROPERTIES = [ // that's the central config of your exceptions customization
-        self::NOT_ENOUGH_MONEY     => [
-            'message' => 'Not enough money',
-            'show_fe' => true, // "FE" stands for "Front End"; controls if a user can see a real message
-        ],
-        self::FORBIDDEN_UNRELIABLE => [
-            'message' => 'The operation is forbidden for unreliable users',
-            'show_fe' => false,' // may be ommitted because it's the default behavior
-        ],
-    ];
-}
-```
 1. Throw exceptions with corresponding codes; add details if needed:
-```php
-class BillingService
-{
-    // ...
 
-    public function checkWallet()
+    ```php
+    class BillingService
     {
         // ...
-        
-        if ($this->price > $this->user->money_available) {
-            throw new UserException(
-                UserException::NOT_ENOUGH_MONEY,
-                'you need to add $' . ($this->price - $this->user->money_available)
-            );
-        }
-        if ($this->user->is_unreliable) {
-            throw new UserException(UserException::FORBIDDEN_UNRELIABLE);
-        }
-    }
-```
-1. Handle exceptions:
-```php
-try {
-    // ...
     
-    $billing_service->checkWallet();
-} catch (CustomizableException $e) {
-    $error_message = $e->getMessageFe(); // show only the messages a user is allowed to see
-    // NOT_ENOUGH_MONEY >> 'Not enough money (you need to add $3.05)'
-    // FORBIDDEN_UNRELIABLE >> 'error 301', the default user-friendly message replacement
-} finally {
-    error_log($e->getMessage()); // or $e->__toString(); log real messages for yourself
-    // NOT_ENOUGH_MONEY >> 'Not enough money (you need to add $3.05)'
-    // FORBIDDEN_UNRELIABLE >> 'The operation is forbidden for unreliable users'
-}
-```
+        public function checkWallet()
+        {
+            // ...
+            
+            if ($this->price > $this->user->money_available) {
+                throw new UserException(
+                    UserException::NOT_ENOUGH_MONEY,
+                    'you need to add $' . ($this->price - $this->user->money_available)
+                );
+            }
+            if ($this->user->is_unreliable) {
+                throw new UserException(UserException::FORBIDDEN_UNRELIABLE);
+            }
+        }
+    ```
+
+1. Handle exceptions:
+
+    ```php
+    try {
+        // ...
+        
+        $billing_service->checkWallet();
+    } catch (CustomizableException $e) {
+        $error_message = $e->getMessageFe(); // show only the messages a user is allowed to see
+        // NOT_ENOUGH_MONEY >> 'Not enough money (you need to add $3.05)'
+        // FORBIDDEN_UNRELIABLE >> 'error 301', the default user-friendly message replacement
+    } finally {
+        error_log($e->getMessage()); // or $e->__toString(); log real messages for yourself
+        // NOT_ENOUGH_MONEY >> 'Not enough money (you need to add $3.05)'
+        // FORBIDDEN_UNRELIABLE >> 'The operation is forbidden for unreliable users'
+    }
+    ```
 
 _getMessageFe()_ method checks if the exception property '_show\_fe_' (in fact the value returned by `canShowFe()`)
 equals **true**. If so it returns the same message you get when call _getMessage()_. Otherwise you'll get a replacement
 "_error XXX_" where _XXX_ is an exception code (it might be a _global code_ if you enable
 [GlobalException](global-exception.md) functionality).
 
-#### Frontend message replacement for a certain exception
+**CustomizableException** also provide you with the translation wrapper _getL10N()_. Visit the
+[_experienced_ section]() to know more about it as well as some other tricks.
+
+### Frontend message replacement for a certain exception
 
 You might want to replace **FORBIDDEN_UNRELIABLE** frontend message with something more specific. Specify
 '_message\_fe_' property and turn on '_show\_fe_' flag:
+
 ```php
 // ...
 
@@ -175,7 +184,7 @@ try {
 }
 ```
 
-#### Exception context
+### Exception context
 
 Sometimes you want to add a substring to an exception message describing the circumstances an exception was thrown.
 For instance you have two "no money" exceptions with similar messages. But one exception is thrown if a user wants
@@ -202,6 +211,7 @@ But you also can create only one exception and then add different context in dif
 
 But there is more! You can even specify the _default_ context ('_context_' property) and redefine it during runtime
 only if needed!
+
 ```php
 // ...
 
@@ -226,16 +236,14 @@ class UserException extends CustomizableException
 }
 ```
 
-#### Overview example script
+### Overview example script
 
 This repository contains an example script with a few classes and exceptions properties configured for a quick review
 of the built-in properties. Just launch it in the CLI:
+
 ```php
 php examples/customizable.php
 ```
-
-**CustomizableException** also provide you with the translation wrapper _getL10N()_. Visit the
-[_experienced_ section]() to know more about it as well as some other tricks.
 
 ## Further reading
 

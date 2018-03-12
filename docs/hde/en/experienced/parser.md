@@ -13,7 +13,7 @@ Contents:
 ## Loading a single class at once
 
 **Parser** can throw an exception for any validation error. If '_ignore_invalid_' and/or '_add_errors_' options are
-enabled then the parsing process will be terminated. In this case not all exceptions classess are processed. And so you
+enabled then the parsing process will be terminated. In this case not all exception classes are processed. And so you
 don't need to load all your exception classes at once.
 
 **Parser** provides you with `loadClass()`. This method is called for loading `$config_class_name` class and every

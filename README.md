@@ -52,16 +52,17 @@ If so then you should use [Parser](#for-customizable-exceptions-parsing).
 
 There are several ways to install the library:
 - Composer:
-```
-composer require magic-push/enterprise-exception
-```
+
+    ```
+    composer require magic-push/enterprise-exception
+    ```
+
 - GIT: clone / fork / the repository, include as submodule etc.
 - Manual #1: Download the repository :smile:.
 - Manual #2 (your tasks related source only):
     - Download [GlobalException.php](src/GlobalException.php) file for the exceptions codes globalization
     feature.
-    - Download the file previously mentioned and [CustomizableException](src/CustomizableException) folder for
-    exceptions customizing and parsing functionality.
+    - Download the whole [src](src) folder for exceptions customizing and parsing functionality.
 
 ## Usage or HOWTO lite edition
 
