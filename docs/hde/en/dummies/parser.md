@@ -2,7 +2,7 @@
 
 (source: [src/CustomizableException/Parser.php](../../../../src/CustomizableException/Parser.php))
 
-**Parser**_::parse()_ is used for... you won't believe it... _parsing_ [GlobalException](global-exception.md) and
+`Parser::parse()` is used for... you won't believe it... _parsing_ [GlobalException](global-exception.md) and
 [CustomizableException](customizable-exception.md) descendants.
 ![You don't say!](../../../assets/images/you-dont-say.jpg)
 
@@ -24,12 +24,12 @@ For several reasons. Here is an illustration from the real world.
 
 A large web application my team continiously develop already contains more than _140_ classes with more than _1300_
 exceptions in total (and counting). When you have so many exceptions (we also use
-[GlobalException](global-exception.md) functionality) you want to be sure there will be no exceptions codes
+[GlobalException](global-exception.md#setup) functionality) you want to be sure there will be no exceptions codes
 duplicates.
 
 Also when we show to users an exception code only (a real message is hidden for front end) it is very great if our
 moderators can type an exception code, press a button and discover the real meaning so they can decide what to do
-next - sometimes we hide real messages from users just because such exceptions describe internal politics restrictions.
+next - sometimes we hide real messages from users just because such exceptions describe internal policies restrictions.
 
 Another reason is our user API. We would like to show there a list of possible exceptions codes and their messages.
 But such a list must contain FE-visible exceptions only. 
@@ -38,18 +38,19 @@ We needed to filter and validate our exceptions somehow. So here comes **Parser*
 
 ## How it works
 
-**Parser** reads **CLASS_CODE_LIST** for classes to check. Every class from this list is parsed first then its
+**Parser** reads `CLASS_CODE_LIST` for classes to check. Every class from this list is parsed first then its
 exceptions (and their properties) are processed. At first `$filters` reduce the data to parse and then class and
 exception codes validations are executed. Finally a formatted output is composed depending on `$options` you
 specify.
 
 ## Prerequisites
 
-If you want to use **Parser** you must have a base exception class that extends **CustomizableException** and has
-**CLASS_CODE_LIST** defined with all exception classes you wish to parse (even if you want to parse
-[GlobalException](global-exception.md) descendants only). If you don't want to use
-[GlobalException](global-exception.md) functionality you can disable it by specifying **0** as a class code - such
-classes are treated as classic exception classes (no codes validation and _global codes_ calculation).
+If you want to use **Parser** you must have a base exception class that extends
+[CustomizableException](customizable-exception.md) and has `CLASS_CODE_LIST` defined with all exception classes you
+wish to parse (even if you want to parse [GlobalException](global-exception.md) descendants only). If you don't want
+to use [GlobalException](global-exception.md#setup) functionality you can disable it in `CLASS_CODE_LIST` by
+specifying **0** as a _class code_ - such classes are treated as classic exception classes (no codes validation and
+_global codes_ calculation).
 
 ```php
 use MagicPush\EnterpriseException\CustomizableException\CustomizableException;
@@ -76,7 +77,8 @@ $exceptions_parsed = Parser::parse(AppException::class, $options, $filters);
 
 Before you start parsing your exception classes make sure that every class is loaded first. It's obligatory for
 **Parser** to do anything. Load all classes manually or install an autoloader and configure it properly. You don't
-need to load all classes at once before calling **Parser** though. Read the [_experienced_ section]() to know more.
+need to load all classes at once before calling **Parser** though. Read the
+[_experienced_ section](../experienced/parser.md#loading-a-single-class-at-once) to know more.
 
 ## Filtering classes
 
@@ -95,7 +97,7 @@ qualified names contain a substring '_Billing_'.
 ### Filtering classes by sections
 
 You can also filter your classes by _sections_ (case sensitive). A _section_ is just a string. For instance you have
-_OddAppException_, _FriendlyAppException_ and _PartnerAppException_ classes. All these classes represent exceptions
+`OddAppException`, `FriendlyAppException` and `PartnerAppException` classes. All these classes represent exceptions
 from different partners. And all of them are the exceptions being thrown by your _partners_ applications. So if you
 want to filter all _partners_ exceptions just give them all the same _section_ name ('_partner_', '_EXTERNAL_' or
 anything else you wish). Then you can just filter all these classes at once:
@@ -103,15 +105,15 @@ anything else you wish). Then you can just filter all these classes at once:
 '_class_name_part_list\_**ex**_' filter).
 
 You can specify sections by two ways:
-- Define **CLASS_SECTION_LIST** array the same way you define **CLASS_CODE_LIST** but instead codes (as
+- Define `CLASS_SECTION_LIST` array the same way you define `CLASS_CODE_LIST` but instead codes (as
 elements values) there should be any strings (or anything else that can be casted to a string) you wish.
-- Define **CLASS_SECTION_DEFAULT** constant with a string (or anything else that can be casted to a string).
+- Define `CLASS_SECTION_DEFAULT` constant with a string (or anything else that can be casted to a string).
 Any class with this constant and all that class descendants will belong to this section.
 
 ## Validating classes
 
-The validation is executed only for classes with [GlobalException](global-exception.md) functionality enabled
-(`CLASS_CODE_LIST` element value is not equal to zero).
+The validation is executed only for classes with [GlobalException](global-exception.md#codes-validation)
+functionality enabled (`CLASS_CODE_LIST` element value is not equal to zero).
 
 Firstly a class code is validated via `GlobalException::validateCodeClass()`. An exception is thrown if a class code
 is not valid.
@@ -130,7 +132,7 @@ Exceptions from [CustomizableException](customizable-exception.md) descendants o
 Almost every exception filter has suffixes _ex_ and _in_ meaning exceptions exclusion and inclusion accordingly.
 
 If you want to parse only exceptions with specific codes (_base codes_ if the exception classes use
-[GlobalException](global-exception.md) functionality) use '_base_code_list_in_' filter. For instance
+[GlobalException](global-exception.md#how-it-works) functionality) use '_base_code_list_in_' filter. For instance
 `$filters['base_code_list_in'] = [11, 12, 14]` will make **Parser** to process only exceptions with their (_base_)
 codes **11**, **12** and **14**. Or if you want to parse every but the exceptions with (_base_) codes **11**, **12**
 and **14** then use '_base_code_list\_**ex**_' filter the same way.
@@ -146,13 +148,14 @@ There is also a property-related filter '_show_fe_'. If you want to generate a l
 users you can set '_show_fe_' to **true**. If you want the opposite list containing only exceptions messages which are
 not supposed to be seen by users then set '_show_fe_' to **false**.
 
-If you want to add some your own filters you should read the [_experienced_ section]() for instructions.
+If you want to add some your own filters you should read the
+[_experienced_ section](../experienced/parser.md#exceptions-custom-filters) for instructions.
 
 ## Validating exceptions
 
 Exceptions validation is executed only for exceptions from [CustomizableException](customizable-exception.md)
-descendants with [GlobalException](global-exception.md) functionality enabled (`CLASS_CODE_LIST` element value is not
-equal to zero).
+descendants with [GlobalException](global-exception.md#setup) functionality enabled (`CLASS_CODE_LIST` element value
+is not equal to zero).
 
 Every exception (_base_) code is validated via `GlobalException::validateCodeBase()`. An exception is thrown if an
 exception (_base_) code is not valid.
@@ -165,9 +168,9 @@ skipped instead.
 The returned data is based only on classes and exceptions which "survive" filtering and validation. Also the returned
 data first level keys depend on classes.
 
-If parsed exception classes use [GlobalException](global-exception.md) functionality then all those exceptions data
-will be put in an array under '_\_\_global_' key. That array's elements will represent each _global exception_ with
-its _global code_ as a key:
+If parsed exception classes use [GlobalException](global-exception.md#setup) functionality then all those exceptions
+data will be put in an array under '_\_\_global_' key. That array's elements will represent each _global exception_
+with its _global code_ as a key:
 
 ```php
 array (
@@ -184,9 +187,9 @@ array (
     // ...
 ```
 
-If parsed exception classes doesn't use [GlobalException](global-exception.md) functionality then exceptions data will
-be put in an array under each exception class fully qualified name as a key. That array's elements will represent each
-exception in that class with its code as a key:
+If parsed exception classes doesn't use [GlobalException](global-exception.md#setup) functionality then exceptions
+data will be put in an array under each exception class fully qualified name as a key. That array's elements will
+represent each exception in that class with its code as a key:
 
 ```php
 array (
@@ -291,9 +294,12 @@ array (
 )
 ```
 
-There is also '_locale_' option wich is passed to the translation wrapper `CustomizableException::getL10N()` for each
-exception message part translation. Also you can change the output format entirely (or maybe add some more options to
-customize it). Visit the [_experienced_ section]() to know more about both topics.
+There is '_locale_' option wich is passed to `CustomizableException::getL10N()` (the
+[translation wrapper](../experienced/customizable-exception.md#translation-wrapper)) for each exception message part
+translation.
+
+Also you can change the output format entirely (or maybe add some more options to customize it). Visit the
+[_experienced_ section](../experienced/parser.md#customizing-the-output) to know more.
 
 ### Overview example script
 
@@ -306,6 +312,6 @@ php examples/parser.php
 
 ## Further reading
 
-- [Parser _experienced_ section]()
+- [Parser _experienced_ section](../experienced/parser.md)
 - [GlobalException](global-exception.md)
 - [CustomizableException](customizable-exception.md)

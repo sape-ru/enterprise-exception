@@ -9,6 +9,8 @@ instructions.
 The _experienced_ section describes additional functionality you can configure or add. Some unordinary cases are
 discussed in that section as well.
 
+A note for both the library and this guide: "FE" stands for "Front End" (or "frontend").
+
 Contents:
 - [Basic usage (or the _dummies_ section)](dummies/about.md)
     - [GlobalException](dummies/global-exception.md)

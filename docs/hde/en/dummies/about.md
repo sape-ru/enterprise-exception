@@ -16,8 +16,7 @@ to find a better way to handle and manage them.
 So did we. We had dozens exception classes and hundreds of exceptions. And one day we were fed up; all our problems
 and inconveniences concerning exceptions were documented and discussed. Some bright ideas appeared that day...
 
-## Further reading
-
+The library offers you these classes:
 - [GlobalException](global-exception.md)
 - [CustomizableException](customizable-exception.md)
 - [Parser](parser.md)

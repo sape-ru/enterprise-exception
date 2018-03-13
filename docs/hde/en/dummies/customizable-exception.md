@@ -5,11 +5,12 @@
 
 **CustomizableException** can solve many problems (it is called _customizable_ for a reason). One of possible problems
 and its solution are described here in this article for some of the class capabilities illustration. Read the
-[_experienced_ section]() for some other problems examples and the rest of the functionality description.
+[_experienced_ section](../experienced/customizable-exception.md) for some other problems examples and the rest of
+the functionality description.
 
 **CustomizableException** extends **GlobalException**. But you don't need to bother reading **GlobalException**
 [documentation](global-exception.md) now - it is optional to configure and you may ignore it completely if you want
-to use just **CustomizableException** functionality _only_.
+to use **CustomizableException** functionality only.
 
 Contents:
 - [Problem](#problem)
@@ -42,10 +43,11 @@ application support page.
 user. This flag is just one of possible exceptions properties. But how exactly can we link properties with certain
 exceptions?
 
-**CustomizableException** requires exceptions codes (_base codes_ in terms of **GlobalException**) as unique keys for
-properties arrays. So an exception code becomes obligatory. And more than that: an exception code becomes the _first_
-parameter for an exception constructor. This is the main difference between **CustomizableException** and classic
-_Exception_ _\_\_construct()_ signatures.
+**CustomizableException** requires exceptions codes (_base codes_ in terms of
+[GlobalException](global-exception.md#how-it-works)) as unique keys for properties arrays. So an exception code
+becomes obligatory. And more than that: an exception code becomes the _first_ parameter for an exception constructor.
+This is the main difference between `CustomizableException::__construct()` and classic `Exception::__construct()`
+signatures.
 
 An exception message becomes one of its properties (also is reffered as the _base message_ from this point)
 so you don't pass it to a constructor anymore. Instead you can specify exception _details_ - an optional substring
@@ -64,18 +66,18 @@ would like to adapt your exception classes one ny one...
 
 No worries! You can set **CustomizableException** as your base exception class' parent immediately without any
 trouble - **CustomizableException** provides you with the dual-mode constructor. If you pass a non-numeric value as the
-first argument the constructor will operate like for classic **Exception** (or [GlobalException](global-exception.md)).
+first argument the constructor will operate like for classic `Exception` (or [GlobalException](global-exception.md)).
 And only if you pass a _numeric_ value as the first argument it will be treated as an exception (_base_) code, the
 second argument will be treated as exception's _details_ and the exception properties will be used (if exist).
 
 ## Setup
 
-Let's imagine, you have an exception class called _UserException_. You have an exception that you can show to a user -
-"_Not enough money_" (_12_). Also you have another exception "_The operation is forbidden for unreliable
-users_" (_301_) and you don't want users to see it's real message.
+Let's imagine, you have an exception class called `UserException`. You have an exception that you can show to a user -
+"_Not enough money_" (**12**). Also you have another exception "_The operation is forbidden for unreliable
+users_" (**301**) and you don't want users to see it's real message.
 
-1. Make _UserException_ class extend **CustomizableException**.
-1. Specify exceptions properties in **EXCEPTIONS_PROPERTIES** array:
+1. Make `UserException` class extend **CustomizableException**.
+1. Specify exceptions properties in `EXCEPTIONS_PROPERTIES` array:
 
     ```php
     use MagicPush\EnterpriseException\CustomizableException\CustomizableException;
@@ -139,17 +141,18 @@ users_" (_301_) and you don't want users to see it's real message.
     }
     ```
 
-_getMessageFe()_ method checks if the exception property '_show\_fe_' (in fact the value returned by `canShowFe()`)
-equals **true**. If so it returns the same message you get when call _getMessage()_. Otherwise you'll get a replacement
+`getMessageFe()` method checks if the exception property '_show\_fe_' (in fact the value returned by `canShowFe()`)
+equals **true**. If so it returns the same message you get when call `getMessage()`. Otherwise you'll get a replacement
 "_error XXX_" where _XXX_ is an exception code (it might be a _global code_ if you enable
 [GlobalException](global-exception.md) functionality).
 
-**CustomizableException** also provide you with the translation wrapper _getL10N()_. Visit the
-[_experienced_ section]() to know more about it as well as some other tricks.
+**CustomizableException** also provide you with the translation wrapper `getL10N()`. Visit the
+[_experienced_ section](../experienced/customizable-exception.md#translation-wrapper) to know more about it as well
+as some other tricks.
 
 ### Frontend message replacement for a certain exception
 
-You might want to replace **FORBIDDEN_UNRELIABLE** frontend message with something more specific. Specify
+You might want to replace `FORBIDDEN_UNRELIABLE` frontend message with something more specific. Specify
 '_message\_fe_' property and turn on '_show\_fe_' flag:
 
 ```php
@@ -210,7 +213,7 @@ But you also can create only one exception and then add different context in dif
 ```
 
 But there is more! You can even specify the _default_ context ('_context_' property) and redefine it during runtime
-only if needed!
+(by calling `setContext()`) only if needed!
 
 ```php
 // ...
@@ -232,7 +235,10 @@ class UserException extends CustomizableException
 
 // buying anything...
 } catch (CustomizableException $e) {
-    $error_message = $e->getMessageFe(); // >> 'Unable to purchase a service: Not enough money (you need to add $3.05)'
+    $error_message = $e->getMessageFe(); // >> "Unable to purchase a service: Not enough money (you need to add $3.05)"
+    $e->setContext('You've squandedered your funds');
+    $error_message = $e->getMessageFe();
+    // >> "You've squandedered your funds: Not enough money (you need to add $3.05)"
 }
 ```
 
@@ -247,6 +253,6 @@ php examples/customizable.php
 
 ## Further reading
 
-- [CustmoizableException _experienced_ section]()
+- [CustmoizableException _experienced_ section](../experienced/customizable-exception.md)
 - [GlobalException](global-exception.md)
 - [Parser](parser.md)
