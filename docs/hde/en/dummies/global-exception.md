@@ -52,7 +52,7 @@ So how exactly **GlobalException** can do such a trick easily and mostly automat
 
 ## How it works
 
-![global exception parts]()
+![global exception parts](../../../assets/images/global-exception-parts.png)
 
 The globalization mechanism is based on a simple math calculation involving mainly these two integers:
 - _Base code_ - it is specified as an exception code: you pass it as the second parameter to an exception constructor.
