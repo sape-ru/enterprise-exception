@@ -14,27 +14,28 @@ Contents:
 ## Inadecuate base code maximum
 
 Your application starts using an external service, let's call it _ExtApp_. That service can throw exceptions. You
-create another [GlobalException](../dummies/global-exception.md) descendant called _ExtAppException_ and configure a
+create another [GlobalException](../dummies/global-exception.md) descendant called `ExtAppException` and configure a
 unique _class code_ for it, let it be **29**. So when _ExtApp_ throws an exception **5101** you pass its code as
-_base code_ to _ExtAppException_ constructor, get your _global code_ **2905101** and everyone is happy...
+_base code_ to `ExtAppException` constructor, get your _global code_ **2905101** and everyone is happy...
 
-_SUDDENLY_ _ExtApp_ throws an exception with its code **325009**. Then bad things happen:
+SUDDENLY _ExtApp_ throws an exception with its code **325009**. Then bad things happen:
 - This code is considered as invalid by `validateCodeBase()` (because it is **not** less than **100000**).
-- The exception is not designated as _global_, `getCode()` returns **325009** _as is_.
+- The exception is not designated as _global_, `getCode()` returns **325009** as is.
 - The exception's _class code_ is considered equal to **0** when its _global code_ is parsed via `getCodeParts()`.
-- [Parser](../dummies/parser.md) throws a validation error.
+- [Parser](../dummies/parser.md#validating-exceptions) throws a validation error if you add the exception to
+`ExtAppException::EXCEPTIONS_PROPERTIES[325009]`.
 
 ### Solution
 
-Increase _ExtAppException_ _base code_ maximum.
+Increase `ExtAppException` _base code_ maximum.
 
-[GlobalException](../dummies/global-exception.md) has `CLASS_CODE_MULTIPLIER` constant which is used for any validation
-or calculation concerning _base codes_. Initially its value equals to **100000** - every _base code_ must be less than
-this value to be considered as valid.
+[GlobalException](../dummies/global-exception.md#codes-validation) has `CLASS_CODE_MULTIPLIER` constant which is used
+for any validation or calculation concerning _base codes_. Initially its value equals to **100000** - every
+_base code_ must be less than this value to be considered as valid.
 
-You can redefine this constant for _ExtAppException_ class. Firstly predict the maximum possible code thrown by
+You can redefine this constant for `ExtAppException` class. Firstly predict the maximum possible code thrown by
 _ExtApp_; let's imagine it is something around **99999999** (**8** digits). Your next move is to redefine
-`CLASS_CODE_MULTIPLIER` in _ExtAppException_ with **8** power of ten:
+`ExtAppException::CLASS_CODE_MULTIPLIER` with **8** power of ten:
 
 ```php
 class ExtAppException extends MyAppBaseException
@@ -44,13 +45,13 @@ class ExtAppException extends MyAppBaseException
 }
 ```
 
-That's it! You don't even need to change _ExtAppException_ _class code_! From this point if _ExtApp_ throws the
-exception **325009** your _ExtAppException_ will successfully calculate the _global code_ **2900325009**.
+That's it! You don't even need to change `ExtAppException` _class code_! From this point if _ExtApp_ throws the
+exception **325009** your `ExtAppException` will successfully calculate the _global code_ **2900325009**.
 
 You should also take into consideration that from this point if you define another exception class with the same _class
 code_ **29** it will be considered as duplicate only if that new class has the same `CLASS_CODE_MULTIPLIER` as
-_ExtAppException_. Otherwise it is guaranteed (and [Parser](../dummies/parser.md) can prove it) that you will have no
-_global codes_ duplicates throughout these two classes:
+`ExtAppException`. Otherwise it is guaranteed (and [Parser](../dummies/parser.md#validating-classes) can prove it)
+that you will have no _global codes_ duplicates throughout these two classes:
 
 ```php
 class ExtAppException extends MyAppBaseException
@@ -74,9 +75,9 @@ echo ExtAppException::getCodeGlobal(1) . "\n";  // >> 2900000001
 echo AnotherException::getCodeGlobal(1) . "\n"; // >> 2900001
 ```
 
-At the same time and for the same reason you should **not** set _AnotherException_ _class code_ to **29000**. Otherwise
-it is possible to generate _global codes_ duplicates (and [Parser](../dummies/parser.md) will throw an exception for
-this case).
+At the same time and for the same reason you should **not** set `AnotherException` _class code_ to **29000**.
+Otherwise it is possible to generate _global codes_ duplicates (and [Parser](../dummies/parser.md) will throw an
+exception for this case).
 
 ## Global code application limit
 
@@ -95,8 +96,8 @@ integer.
 ### Solution
 
 `getCodeClassMax()` is finalized intentionally. Change `GLOBAL_CODE_MAX_RELATIVE` instead. Initially its value equals
-to `PHP_INT_MAX` but you can change it to fit your application limits. For the example described above you should set
-the limit to 32-bit signed integer maximum:
+to `PHP_INT_MAX` but you can decrease it to fit your application limits. For the example described above you should
+set the limit to 32-bit signed integer maximum:
 
 ```php
 // All your exception classes used in your application API must extend this class:
@@ -146,14 +147,16 @@ For now there is no solution [GlobalException](../dummies/global-exception.md) c
 
 ## Global codes formatting
 
-If you want to print a formatted _global code_ then redefine and use `getCodeFormatted()` static method.
+If you want to print a formatted _global code_ then redefine and use `getCodeFormatted()` static method. Initially
+this method returns just a _global code_ itself and accepts a _base code_ as the only parameter.
 
-Initially this method returns just a _global code_ itself and accepts a _base code_ as the only parameter. Also this
-method is called in `CustomizableException::getMessageDefault()` and `CustomizableException::getMessageFeStub()`
-methods (read [Mastering CustomizableException]() for more info).
+`getCodeFormatted()` is called in `CustomizableException::getMessageFeStub()` and
+`CustomizableException::getMessageDefault()` methods. Read _Mastering CustomizableException_ for more info about
+[frontend message stub](customizable-exception.md#frontend-message-stub) and
+[default base message](customizable-exception.md#default-base-message).
 
 ## Further reading
 
 - [GlobalException basics](../dummies/global-exception.md)
-- [Mastering CustomizableException]()
-- [Mastering Parser]()
+- [Mastering CustomizableException](customizable-exception.md)
+- [Mastering Parser](parser.md)
