@@ -4,10 +4,10 @@
 [src/CustomizableException/CustomizableException.php](../../../../src/CustomizableException/CustomizableException.php))
 
 This article describes some ways of tweaking [CustomizableException](../dummies/customizable-exception.md).
-If you're not familiar with the library basics then [go read it](../dummies/about.md) first!
+If you're not familiar with the library basics then [go learn them](../dummies/about.md) first!
 
-Firstly take into your consideration the main **CustomizableException** feature - ist _customization_: in addition to
-already built-in properties you can expand `EXCEPTIONS_PROPERTIES` with as many new properties as you wish!
+Take into your consideration the main **CustomizableException** feature - ist _customization_: in addition to already
+built-in properties you can expand `EXCEPTIONS_PROPERTIES` with as many new properties as you wish!
 
 Contents:
 - [Full message composer](#full-message-composer)
@@ -18,8 +18,8 @@ Contents:
 
 ## Full message composer
 
-If a classic exception message is just a string you specify as its constructor first argument then an exception
-_full message_ is [CustomizableException](../dummies/customizable-exception.md) message composed by
+A classic exception message is just a string you specify as its constructor first argument.
+[CustomizableException](../dummies/customizable-exception.md) object's _full message_ is composed by
 `getMessageComposed()` from several parts (such as _context_ and _base message_). This method is called implicitly:
 - in the constructor for the [_system_ version](#translation-wrapper);
 - in `getMessageFe()` for the [_frontend_ version](#translation-wrapper) (if an exception
@@ -85,7 +85,7 @@ value.
 
 ### Usage
 
-You can call this wrapper manually if you wish. But this wrapper is also called implicitly for your convenience:
+You can call this wrapper manually if you wish. But it is also called implicitly for your convenience:
 - when you [change an exception context](../dummies/customizable-exception.md#exception-context) (`$locale` is set to
 `null`) during runtime;
 - in `getMessageFeStub()` (`$locale` is set to `null`) for the _'error'_ substring if you don't
@@ -106,8 +106,8 @@ as frontend-visible).
 
 ## Default base message
 
-If an exception properties has no '_message_' property then the constructor considers such an exception as non-user (
-`canSowFe()` returns `false`) and specifies the value returned by `getMessageDefault()` as an exception _base message_.
+If an exception properties have no '_message_' property then the constructor considers such an exception as non-user (
+`canSowFe()` returns `false`) and sets an exception _base message_ to the value returned by `getMessageDefault()`.
 
 Initially such a message has the format: `CustomizableException XXX (YYY::ZZZ)` where _XXX_ is an exception
 [formatted code](global-exception.md#global-codes-formatting), _YYY_ is an exception fully qualified class name and
@@ -119,8 +119,8 @@ Redefine `getMessageDefault()` at your will to fit your logs or admin interfaces
 ## Unkown exception
 
 If there is no `EXCEPTIONS_PROPERTIES` element for an exception you throw then the constructor considers such an
-exception as non-user (`canSowFe()` returns `false`) and specifies the value returned by `getMessageUnknown()` as an
-exception _base message_.
+exception as non-user (`canSowFe()` returns `false`) and sets an exception _base message_ to the value returned by
+`getMessageUnknown()`.
 
 Initially such a message has the format: `unknown base code XXX for CustomizableException (YYY)` where _XXX_ is an
 exception code (the _base code_ if you use [GlobalException](../dummies/global-exception.md#how-it-works)
@@ -130,6 +130,6 @@ Redefine `getMessageUnknown()` at your will to fit your logs or admin interfaces
 
 ## Further reading
 
-- [CustomizableException basics](../dummies/customizable-exception.md)
-- [Mastering GLobalException](global-exception.md)
+- [Mastering GlobalException](global-exception.md)
 - [Mastering Parser](parser.md)
+- [CustomizableException](../dummies/customizable-exception.md)

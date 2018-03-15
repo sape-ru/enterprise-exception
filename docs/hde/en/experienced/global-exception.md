@@ -3,7 +3,8 @@
 (source: [src/GlobalException.php](../../../../src/GlobalException.php))
 
 Sometimes you need more flexibility with [GlobalException](../dummies/global-exception.md). This article describes some
-unordinary cases and their possible solutions.
+unordinary cases and their possible solutions. If you're not familiar with the library basics then
+[go learn them](../dummies/about.md) first!
 
 Contents:
 - [Inadecuate base code maximum](#inadecuate-base-code-maximum)
@@ -21,7 +22,8 @@ _base code_ to `ExtAppException` constructor, get your _global code_ **2905101**
 SUDDENLY _ExtApp_ throws an exception with its code **325009**. Then bad things happen:
 - This code is considered as invalid by `validateCodeBase()` (because it is **not** less than **100000**).
 - The exception is not designated as _global_, `getCode()` returns **325009** as is.
-- The exception's _class code_ is considered equal to **0** when its _global code_ is parsed via `getCodeParts()`.
+- The exception's _class code_ is considered equal to **0** when its _global code_ is parsed via `getCodeParts()`
+(the method usage is mentioned [later in this article](#global-exceptions-from-another-world)).
 - [Parser](../dummies/parser.md#validating-exceptions) throws a validation error if you add the exception to
 `ExtAppException::EXCEPTIONS_PROPERTIES[325009]`.
 
@@ -30,7 +32,7 @@ SUDDENLY _ExtApp_ throws an exception with its code **325009**. Then bad things 
 Increase `ExtAppException` _base code_ maximum.
 
 [GlobalException](../dummies/global-exception.md#codes-validation) has `CLASS_CODE_MULTIPLIER` constant which is used
-for any validation or calculation concerning _base codes_. Initially its value equals to **100000** - every
+for any validation or calculation concerning _base_ or _global codes_. Initially its value equals to **100000** - every
 _base code_ must be less than this value to be considered as valid.
 
 You can redefine this constant for `ExtAppException` class. Firstly predict the maximum possible code thrown by
@@ -90,7 +92,7 @@ possible _global code_ maximum will not exceed PHP integer maximum. But sometime
 
 For instance if your aplication has its own API based on [XML-RPC protocol](http://xmlrpc.scripting.com/spec.html)
 your API capabilites are limited: _faultCode_ (and any other integer values) must be of type 32-bit signed integer -
-_int8_ is not supported by the protocol. So you need to ensure your _global codes_ will _not_ exceed 32-bit signed
+_int8_ is not supported by the protocol. So you need to ensure your _global codes_ will not exceed 32-bit signed
 integer.
 
 ### Solution
@@ -142,8 +144,11 @@ Just imagine if two or more external API start using [GlobalException](../dummie
 return identical _global codes_ with different meanings. And you can not convince any of their developers to change
 _class codes_. Also you can't afford treating those codes as _base_ because of those integers size.
 
-For now there is no solution [GlobalException](../dummies/global-exception.md) can provide you with... But maybe
-**you** can suggest a nice strategy or the library improvement!
+For now there is no solution [GlobalException](../dummies/global-exception.md) can provide you with...  You must treat
+such exception as non-global and differ somehow manually from the rest exceptions.
+
+Feel free to create an issue or a pull request and suggest your nice strategy or the library improvement for this
+scenario!
 
 ## Global codes formatting
 
@@ -157,6 +162,6 @@ this method returns just a _global code_ itself and accepts a _base code_ as the
 
 ## Further reading
 
-- [GlobalException basics](../dummies/global-exception.md)
 - [Mastering CustomizableException](customizable-exception.md)
 - [Mastering Parser](parser.md)
+- [GlobalException](../dummies/global-exception.md)

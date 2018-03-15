@@ -23,16 +23,16 @@ Contents:
 For several reasons. Here is an illustration from the real world.
 
 A large web application my team continiously develop already contains more than _140_ classes with more than _1300_
-exceptions in total (and counting). When you have so many exceptions (we also use
-[GlobalException](global-exception.md#setup) functionality) you want to be sure there will be no exceptions codes
+exceptions in total (and counting). When you have so many exceptions and use
+[GlobalException](global-exception.md#setup) functionality you want to be sure there will be no _global codes_
 duplicates.
 
-Also when we show to users an exception code only (a real message is hidden for front end) it is very great if our
+Also when we show an exception code only (a real message is hidden for front end) to users it is very great if our
 moderators can type an exception code, press a button and discover the real meaning so they can decide what to do
 next - sometimes we hide real messages from users just because such exceptions describe internal policies restrictions.
 
 Another reason is our user API. We would like to show there a list of possible exceptions codes and their messages.
-But such a list must contain FE-visible exceptions only. 
+But such a list must update automatically and contain FE-visible exceptions only. 
 
 We needed to filter and validate our exceptions somehow. So here comes **Parser**!
 
@@ -76,9 +76,9 @@ $exceptions_parsed = Parser::parse(AppException::class, $options, $filters);
 ```
 
 Before you start parsing your exception classes make sure that every class is loaded first. It's obligatory for
-**Parser** to do anything. Load all classes manually or install an autoloader and configure it properly. You don't
-need to load all classes at once before calling **Parser** though. Read the
-[_experienced_ section](../experienced/parser.md#loading-a-single-class-at-once) to know more.
+**Parser** to do anything (the not loaded classes are ignored during the process). Load all classes manually or
+install an autoloader and configure it properly. You don't need to load all classes at once before calling **Parser**
+though. Read the [_experienced_ section](../experienced/parser.md#loading-a-single-class-at-once) to know more.
 
 ## Filtering classes
 
@@ -90,9 +90,9 @@ If you want to parse classes with specific codes only use '_class_code_list_in_'
 filter the same way.
 
 The filters '_class_name_part_list_ex_' and '_class_name_part_list_in_' allow you to exclude or include classes by
-substrings found in their fully qualified names parts (case sensitive). For instance
-`$filters['class_name_part_list_in'] = ['Billing']` will make **Parser** to process only classes which fully
-qualified names contain a substring '_Billing_'.
+substrings found in their fully qualified names (case sensitive). For instance `$filters['class_name_part_list_in']
+= ['Billing']` will make **Parser** to process only classes with their fully qualified names containing the substring
+'_Billing_'.
 
 ### Filtering classes by sections
 
@@ -100,15 +100,33 @@ You can also filter your classes by _sections_ (case sensitive). A _section_ is 
 `OddAppException`, `FriendlyAppException` and `PartnerAppException` classes. All these classes represent exceptions
 from different partners. And all of them are the exceptions being thrown by your _partners_ applications. So if you
 want to filter all _partners_ exceptions just give them all the same _section_ name ('_partner_', '_EXTERNAL_' or
-anything else you wish). Then you can just filter all these classes at once:
-`$filters['class_name_part_list_in'] = ['partner']` (or exclude them by specifying partners section name to
-'_class_name_part_list\_**ex**_' filter).
+anything else you wish). Then you can just filter all these classes at once: `$filters['class_name_part_list_in'] =
+['partner', 'EXTERNAL']` (or exclude them by specifying partners section names to '_class_name_part_list\_**ex**_'
+filter).
 
 You can specify sections by two ways:
 - Define `CLASS_SECTION_LIST` array the same way you define `CLASS_CODE_LIST` but instead codes (as
-elements values) there should be any strings (or anything else that can be casted to a string) you wish.
+elements values) there should be any strings (or anything else that can be casted to a string) you wish:
+
+    ```php
+      // ...
+  
+      abstract class AppException extends CustomizableException
+      {
+          // ...
+          
+          const CLASS_SECTION_LIST = [
+              FriendlyAppException::class => 'partner',
+              PartnerAppException::class  => 'partner',
+              OddAppException::class      => 'EXTERNAL',
+              // ...
+          ];
+      }
+    ```
+    
 - Define `CLASS_SECTION_DEFAULT` constant with a string (or anything else that can be casted to a string).
-Any class with this constant and all that class descendants will belong to this section.
+Any class with this constant (and all its descendants which do not redefine `CLASS_SECTION_DEFAULT`) will belong to
+that section.
 
 ## Validating classes
 
@@ -146,9 +164,10 @@ borders):
 
 There is also a property-related filter '_show_fe_'. If you want to generate a list of exceptions messages visible for
 users you can set '_show_fe_' to **true**. If you want the opposite list containing only exceptions messages which are
-not supposed to be seen by users then set '_show_fe_' to **false**.
+not supposed to be seen by users then set '_show_fe_' to **false**. Set it to **null** for disabling the filter (the
+default behavior).
 
-If you want to add some your own filters you should read the
+If you want to add your own filters you should read the
 [_experienced_ section](../experienced/parser.md#exceptions-custom-filters) for instructions.
 
 ## Validating exceptions
@@ -157,8 +176,8 @@ Exceptions validation is executed only for exceptions from [CustomizableExceptio
 descendants with [GlobalException](global-exception.md#setup) functionality enabled (`CLASS_CODE_LIST` element value
 is not equal to zero).
 
-Every exception (_base_) code is validated via `GlobalException::validateCodeBase()`. An exception is thrown if an
-exception (_base_) code is not valid.
+Every exception _base code_ is validated via `GlobalException::validateCodeBase()`. An exception is thrown if an
+exception _base code_ is not valid.
 
 If you specify '_add_errors_' or '_ignore_invalid_' option then no exception is thrown, the invalid exceptions are just
 skipped instead.
@@ -179,7 +198,7 @@ array (
         100001 => // ...
         100002 => // ...
         // ...
-        // here comes codes from another global class:
+        // here come codes from another global class:
         200001 => // ...
         200002 => // ...
         // ...
@@ -187,7 +206,7 @@ array (
     // ...
 ```
 
-If parsed exception classes doesn't use [GlobalException](global-exception.md#setup) functionality then exceptions
+If parsed exception classes do not use [GlobalException](global-exception.md#setup) functionality then exceptions
 data will be put in an array under each exception class fully qualified name as a key. That array's elements will
 represent each exception in that class with its code as a key:
 
@@ -239,9 +258,8 @@ array (
   array (
     100001 => 'Something bad happened',
     100002 => 'Upgrading a profile: not enough money', // has 'context' property
-     // the next exception has 'message_fe' property:
-    100003 => 'Please verify your email first', // is returned if 'use_message_fe' option is enabled
-    // and now the same exception without 'use_message_fe' option
+    100003 => 'The operation is forbidden for unreliable users', // is returned if 'use_message_fe' option is disabled
+     // but if you enable 'use_message_fe' option:
  // 100003 => 'The operation is forbidden for unreliable users',
     // ...
   ),
@@ -304,7 +322,7 @@ Also you can change the output format entirely (or maybe add some more options t
 ### Overview example script
 
 This repository contains an example script with a few classes and exceptions properties configured for a quick review
-of the parsed results. Just launch it in the CLI:
+of the parsed results. Just launch it in a CLI:
 
 ```php
 php examples/parser.php
@@ -312,6 +330,6 @@ php examples/parser.php
 
 ## Further reading
 
-- [Parser _experienced_ section](../experienced/parser.md)
 - [GlobalException](global-exception.md)
 - [CustomizableException](customizable-exception.md)
+- [Mastering Parser](../experienced/parser.md)
