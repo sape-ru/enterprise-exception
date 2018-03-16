@@ -6,8 +6,8 @@
 This article describes some ways of tweaking [CustomizableException](../dummies/customizable-exception.md).
 If you're not familiar with the library basics then [go learn them](../dummies/about.md) first!
 
-Take into your consideration the main **CustomizableException** feature - ist _customization_: in addition to already
-built-in properties you can expand `EXCEPTIONS_PROPERTIES` with as many new properties as you wish!
+Keep in mind the main **CustomizableException** feature - ist _customization_: in addition to already
+supported properties you can expand `EXCEPTIONS_PROPERTIES` with as many new properties as you wish!
 
 Contents:
 - [Full message composer](#full-message-composer)
@@ -20,11 +20,12 @@ Contents:
 
 A classic exception message is just a string you specify as its constructor first argument.
 [CustomizableException](../dummies/customizable-exception.md) object's _full message_ is composed by
-`getMessageComposed()` from several parts (such as _context_ and _base message_). This method is called implicitly:
+`getMessageComposed()` from several parts (such as _context_, _base message_ and _details_). This method is called
+implicitly:
 - in the constructor for the [_system_ version](#translation-wrapper);
 - in `getMessageFe()` for the [_frontend_ version](#translation-wrapper) (if an exception
 is configured as frontend-visible);
-- in [Parser](../dummies/parser.md#data-returned) as a part of parsed data output (if `$options['is_extended']`
+- in [Parser](../dummies/parser.md#data-returned) for composing parsed data output (if `$options['is_extended']`
 equals `false`).
 
 Initially this method composes a _full message_ in a format:
@@ -88,7 +89,7 @@ value.
 You can call this wrapper manually if you wish. But it is also called implicitly for your convenience:
 - when you [change an exception context](../dummies/customizable-exception.md#exception-context) (`$locale` is set to
 `null`) during runtime;
-- in `getMessageFeStub()` (`$locale` is set to `null`) for the _'error'_ substring if you don't
+- in `getMessageFeStub()` (`$locale` is set to `null`) for the '_error_' substring if you don't
 [redefine it](#frontend-message-stub);
 - in [Parser](../dummies/parser.md#data-returned) (`$locale` is set to `$options['locale']`) for exceptions messages
 parts while composing parsed data output - you can specify any locale you wish in '_locale_' option (the default
@@ -99,7 +100,7 @@ message_:
 1. The _system_ version is made by passing `L10N_SYSTEM_LOCALE` as `$locale` value. The
 [composed message](#full-message-composer) is passed then to a parent constructor so you can get the original message
 for logs or admin interfaces.
-2. The _frontend_ version is made by passing `null` as `$locale` value. Then the _context_ and _base message_
+1. The _frontend_ version is made by passing `null` as `$locale` value. Then the _context_ and _base message_
 are accessible separately via `getContext()` and `getMessageBase()` accordingly; also these parts are used for the
 frontend [full message](#full-message-composer) composed in `getMessageFe()` (if an exception message is configured
 as frontend-visible).
@@ -110,9 +111,9 @@ If an exception properties have no '_message_' property then the constructor con
 `canSowFe()` returns `false`) and sets an exception _base message_ to the value returned by `getMessageDefault()`.
 
 Initially such a message has the format: `CustomizableException XXX (YYY::ZZZ)` where _XXX_ is an exception
-[formatted code](global-exception.md#global-codes-formatting), _YYY_ is an exception fully qualified class name and
-_ZZZ_ is an exception code (the _base code_ if you use [GlobalException](../dummies/global-exception.md#how-it-works)
-functionality).
+[formatted code](global-exception.md#global-codes-formatting), _YYY_ is an exception qualified namespaced class name
+and _ZZZ_ is an exception code (the _base code_ if you use
+[GlobalException](../dummies/global-exception.md#how-it-works) functionality).
 
 Redefine `getMessageDefault()` at your will to fit your logs or admin interfaces undefined message error format.
 
@@ -124,7 +125,7 @@ exception as non-user (`canSowFe()` returns `false`) and sets an exception _base
 
 Initially such a message has the format: `unknown base code XXX for CustomizableException (YYY)` where _XXX_ is an
 exception code (the _base code_ if you use [GlobalException](../dummies/global-exception.md#how-it-works)
-functionality) and _YYY_ is an exception fully qualified class name.
+functionality) and _YYY_ is an exception qualified namespaced class name.
 
 Redefine `getMessageUnknown()` at your will to fit your logs or admin interfaces unkown error format.
 
@@ -132,4 +133,4 @@ Redefine `getMessageUnknown()` at your will to fit your logs or admin interfaces
 
 - [Mastering GlobalException](global-exception.md)
 - [Mastering Parser](parser.md)
-- [CustomizableException](../dummies/customizable-exception.md)
+- [CustomizableException basics](../dummies/customizable-exception.md)

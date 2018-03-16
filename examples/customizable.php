@@ -13,7 +13,7 @@ use MagicPush\EnterpriseException\CustomizableException\CustomizableException;
  *
  * There is some special processing for certain exceptions to demonstrate some CustomizableException features.
  *
- * @param string $exception_class A fully qualified exception class name.
+ * @param string $exception_class A qualified namespaced exception class name.
  *
  * @return void
  */

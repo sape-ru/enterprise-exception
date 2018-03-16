@@ -17,18 +17,18 @@ are enabled the parsing process will be terminated. In this case not all excepti
 don't need to load all your exception classes at once.
 
 **Parser** provides you with `loadClass()`. This method is called for loading `$config_class_name` class and every
-exception class you specify in `CLASS_CODE_LIST`. Initially this method does nothing but you can redefine it to load
-a class by its fully qualified name.
+exception class you specify in `CLASS_CODE_LIST` before that class is processed. Initially this method does nothing
+but you can redefine it to load a class by its qualified namespaced name.
 
 ## Exceptions custom filters
 
 **Parser** already has built-in [exceptions filters](../dummies/parser.md#filtering-exceptions). If you want to add
-some new filters (for instance if you add new properties to `EXCEPTIONS_PROPERTIES`) you should consider redefining
-`needFilterException()`. This method is called after all built-in filters are processed; it answers the question if
-an exception must be **ex**cluded from processing.
+some new filters (for instance if you add new properties support for `EXCEPTIONS_PROPERTIES`) you should consider
+redefining `needFilterException()`. This method is called after all built-in filters are processed; it answers the
+question if an exception must be **ex**cluded from processing.
 
 Initially `needFilterException()` always returns **false** (so _no_ exceptions must be excluded by the method). Its
-arguments are `$filters`, an exception _base code_ and `$options`; `$filters` and `$options` arrays are the arrays
+parameters are `$filters`, an exception _base code_ and `$options`; `$filters` and `$options` arrays are the arrays
 specified for `parse()`, they are passed unchanged by references.
 
 ## Customizing the output
@@ -47,10 +47,10 @@ reference.
 - `$basis` - an exception data array:
     - `'base_code'` => an exception (_base_) code
     - `'class_code'` => an exception class code
-    - `'class_name'` => a fully qualified exception class name
+    - `'class_name'` => a qualified namespaced exception class name
 
 ## Further reading
 
 - [Mastering GlobalException](global-exception.md)
 - [Mastering CustomizableException](customizable-exception.md)
-- [Parser](../dummies/customizable-exception.md)
+- [Parser basics](../dummies/customizable-exception.md)

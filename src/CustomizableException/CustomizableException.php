@@ -51,8 +51,8 @@ abstract class CustomizableException extends GlobalException
      *
      * This config is used by Parser to filter exception classes by sections you can set.
      * Each element of the config represents an exception class (a subclass of CustomizableException).
-     * The element key must be a fully qualified class name (AnyClass::class) or it will be ignored -
-     * not found while comparing with a fully qualified class name being checked for filtering.
+     * The element key must be a qualified namespaced class name (AnyClass::class) or it will be ignored -
+     * not found while comparing with a qualified namespaced class name being checked for filtering.
      * The element value may be any string (or a number) you prefer to use as a section name. Just use the same string
      * in Parser section filter to include or exclude any class linked to that section.
      * If you want to set a default section to all classes not specified in this config then redefine

@@ -82,7 +82,7 @@ The short usage guide is:
 1. Your base exception class must extend [GlobalException](src/GlobalException.php).
 1. The classes you want to globalize must extend your base exception class (previously mentioned).
 1. You must redefine **CLASS_CODE_LIST** constant array in your base exception class with your exception classes
-fully qualified names as keys and their own (class) codes as values.
+qualified namespaced names as keys and their own (class) codes as values.
 1. That's it! Now your exceptions have unique codes!
 
 ### For exceptions customization

@@ -35,7 +35,7 @@ abstract class GlobalException extends \Exception
     /**
      * @var array|int[] The central config for globalizing exceptions' codes.
      *
-     * The array key must be a fully qualified class name (AnyClass::class) or it will be ignored -
+     * The array key must be a qualified namespaced class name (AnyClass::class) or it will be ignored -
      * not found while getting a class code (::getCodeClass()).
      * The array value (a class code) should be a positive integer to enable the globalization feature for that class.
      * A class code equivalent to 0 disables the globalization feature for that class

@@ -7,23 +7,23 @@ unordinary cases and their possible solutions. If you're not familiar with the l
 [go learn them](../dummies/about.md) first!
 
 Contents:
-- [Inadecuate base code maximum](#inadecuate-base-code-maximum)
+- [Inappropriate base code maximum](#inappropriate-base-code-maximum)
 - [Global code application limit](#global-code-application-limit)
 - [Global exceptions from another world](#global-exceptions-from-another-world)
 - [Global codes formatting](#global-codes-formatting)
 
-## Inadecuate base code maximum
+## Inappropriate base code maximum
 
-Your application starts using an external service, let's call it _ExtApp_. That service can throw exceptions. You
-create another [GlobalException](../dummies/global-exception.md) descendant called `ExtAppException` and configure a
-unique _class code_ for it, let it be **29**. So when _ExtApp_ throws an exception **5101** you pass its code as
-_base code_ to `ExtAppException` constructor, get your _global code_ **2905101** and everyone is happy...
+Let's imagine your application has started using an external service, let's call it _ExtApp_. That service can throw
+exceptions. You create another [GlobalException](../dummies/global-exception.md) descendant called `ExtAppException`
+and configure a unique _class code_ for it, let it be **29**. So when _ExtApp_ throws an exception **5101** you pass
+its code as _base code_ to `ExtAppException` constructor, get your _global code_ **2905101** and everyone is happy...
 
 SUDDENLY _ExtApp_ throws an exception with its code **325009**. Then bad things happen:
 - This code is considered as invalid by `validateCodeBase()` (because it is **not** less than **100000**).
 - The exception is not designated as _global_, `getCode()` returns **325009** as is.
-- The exception's _class code_ is considered equal to **0** when its _global code_ is parsed via `getCodeParts()`
-(the method usage is mentioned [later in this article](#global-exceptions-from-another-world)).
+- The exception's _class code_ is considered equal to **0** when the value returned by `getCode()` is parsed via
+`getCodeParts()` (the method usage is mentioned [later in this article](#global-exceptions-from-another-world)).
 - [Parser](../dummies/parser.md#validating-exceptions) throws a validation error if you add the exception to
 `ExtAppException::EXCEPTIONS_PROPERTIES[325009]`.
 
@@ -40,15 +40,16 @@ _ExtApp_; let's imagine it is something around **99999999** (**8** digits). Your
 `ExtAppException::CLASS_CODE_MULTIPLIER` with **8** power of ten:
 
 ```php
-class ExtAppException extends MyAppBaseException
+class ExtAppException extends GlobalException
 {
     const CLASS_CODE_MULTIPLIER = 10 ** 8;
     // ...
 }
 ```
 
-That's it! You don't even need to change `ExtAppException` _class code_! From this point if _ExtApp_ throws the
-exception **325009** your `ExtAppException` will successfully calculate the _global code_ **2900325009**.
+That's it! You don't even need to change `ExtAppException` _class code_! From this point if _ExtApp_ throws an
+exception with the code **325009** your `ExtAppException` will successfully calculate the _global code_ **2900325009**
+for that exception.
 
 You should also take into consideration that from this point if you define another exception class with the same _class
 code_ **29** it will be considered as duplicate only if that new class has the same `CLASS_CODE_MULTIPLIER` as
@@ -84,7 +85,7 @@ exception for this case).
 ## Global code application limit
 
 An exception valid _global code_ is limited by valid _base code_ and _class code_. You should already know the
-[real _base code_ condition](#inadecuate-base-code-maximum) and how to alter it.
+[real _base code_ condition](#inappropriate-base-code-maximum) and how to alter it.
 
 A _class code_ is validated by `validateCodeClass()` - it must be positive (or equal to **0** for disabling the
 globalization feature) but less than the value returned by `getCodeClassMax()`. This condition guarantee that a
@@ -112,8 +113,8 @@ class MyAppOrAPIBaseException extends GlobalException
 ```
 
 Then if you don't alter `CLASS_CODE_MULTIPLIER` your _class code_ maximum will be **21473**. If you throw an
-exception with the _base code_ **99999** you will get the _global code_ **2147399999** wich is definitely less than
-32-bit signed integer maximum (**2147483647**).
+exception of such a class with the _base code_ **99999** you will get the _global code_ **2147399999** wich is
+definitely less than 32-bit signed integer maximum (**2147483647**).
 
 ## Global exceptions from another world
 
@@ -126,7 +127,7 @@ as _base codes_. You must treat those as _global codes_ and create your
 
 ### Solution
 
-Let's imagine a scenario when you can be certain about the _class codes_ that external application API uses to generate
+Let's imagine a scenario when you can be certain about the _class codes_ that external application uses to calculate
 its global exceptions. For instance the API can return codes in range from **1100001** to **1599999** (_class codes_
 range from **11** to **15**, the same `CLASS_CODE_MULTIPLIER` is equal to **100000**).
 
@@ -153,7 +154,7 @@ scenario!
 ## Global codes formatting
 
 If you want to print a formatted _global code_ then redefine and use `getCodeFormatted()` static method. Initially
-this method returns just a _global code_ itself and accepts a _base code_ as the only parameter.
+this method returns just a _global code_ itself and accepts a _base code_ as its only argument.
 
 `getCodeFormatted()` is called in `CustomizableException::getMessageFeStub()` and
 `CustomizableException::getMessageDefault()` methods. Read _Mastering CustomizableException_ for more info about
@@ -164,4 +165,4 @@ this method returns just a _global code_ itself and accepts a _base code_ as the
 
 - [Mastering CustomizableException](customizable-exception.md)
 - [Mastering Parser](parser.md)
-- [GlobalException](../dummies/global-exception.md)
+- [GlobalException basics](../dummies/global-exception.md)

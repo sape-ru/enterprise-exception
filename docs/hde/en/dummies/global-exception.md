@@ -20,31 +20,32 @@ has some complicated business logic and can throw different exceptions. Some of 
 When _CoolApp_'s API client _unfortunate_robot_ (you'll understand very soon why it is so unfortunate) calls `foo()`
 it expects those exceptions and is ready to parse and process them by codes (not a big deal). When it catches **230**
 it informs a user that some money should be added to a wallet for completing the process successfully. And when that
-_unfortunate_robot_  catches **525** it just sleeps for 5 seconds and then calls `foo()` again (with no tries limit;
+_unfortunate_robot_ catches **525** it just sleeps for 5 seconds and then calls `foo()` again (with no tries limit;
 yes, it's is not a very good practice but is suitable for the problem illustration).
 
-SUDDENLY _CoolApp_ makes a deal with _OddApp_ to operate together for some mutual benefits. One of the deal's part is
-that `foo()` business logic includes now a request to _OddApp_ API for some extra processing.
-So one unfortunate day our already well known _unfortunate_robot_ calls `foo()` and gets **525**... The problem is that
-this time the **525** exception is thrown by _OddApp_'s functionality and means something very different - "_Out of
-stock_". Such an exception occurs every time this poor robot calls `foo()`, catches **525**, sleeps 5 seconds, tries
-again... And there is more: _CoolApp_ still keeps its own **525** - "_Internal temporary error_" exception may appear
-as well.
+SUDDENLY _CoolApp_'s owner makes a deal with _OddApp_'s owner to operate together for some mutual benefits. One of the
+deal's part is that `foo()` business logic includes now a request to _OddApp_ API for some extra processing.
+
+So one unfortunate day our already well known _unfortunate_robot_ calls `foo()` and gets the **525** exception...
+The problem is that this time the **525** exception is thrown by _OddApp_'s functionality and means something very
+different - "_Out of stock_". Such an exception occurs every time this poor robot calls `foo()`, catches **525**,
+sleeps 5 seconds, tries again... Until a product is in a stock again. And there is more: _CoolApp_ still keeps its
+own **525** - "_Internal temporary error_" exception may appear as well.
 
 So that _unfortunate_robot_ just can't determine the nature of that **525** now. The robot's developer must notice
 the endless loop problem and reprogram the robot to parse not a code but a message (or just to add the tries limit).
-As you probably know such a practice is not a very reliable or suitable one. On the other side _CoolApp_ could handle
-_OddApp_ exception to transform it to _CoolApp_ exception with the same meaning and a new code **600**. But such a
-thing must be done for each new _OddApp_ exception and a new code uniqueness must be guaranteed somehow by _CoolApp_.
+As you probably know such a practice is not a very reliable one. On the other side _CoolApp_ could handle _OddApp_
+exception to transform it to _CoolApp_ exception with the same meaning and a new code **600**. But such a thing must
+be done for each new _OddApp_ exception and a new code uniqueness must be guaranteed somehow by _CoolApp_.
 
-Of course there are other possible solutions for such a problem and there are other inconveniences caused by exceptions
-codes duplicates. But we wanted something universal that could handle many different problems by one common and more
-automated strategy... And here comes **GlobalException**.
+Of course there are other possible solutions for such a problem and there might be other inconveniences caused by
+possible exceptions codes duplicates. But we wanted something universal that could handle many different problems by
+one common and more automated strategy... And here comes **GlobalException**.
 
 ## Solution
 
-It would be great if _CoolApp_ could transform both own and _OldApp_ exceptions codes **525** into unique ones
-automatically. If done so then _unfortunate_robot_ becomes _lucky_robot_ because it can differ those codes easily
+It would be great if _CoolApp_ could transform both own and _OldApp_ exceptions codes **525** (фтв others) into unique
+ones automatically. If done so then _unfortunate_robot_ becomes _lucky_robot_ because it can differ those codes easily
 without any hacks! The only thing the robot's developer needs is specifying both new unique codes for the exceptions
 individual post-processing.
 
@@ -52,10 +53,12 @@ So how exactly **GlobalException** can do such a trick easily and mostly automat
 
 ## How it works
 
-![global exception parts](../../../assets/images/global-exception-parts.png)
+![global exception parts](../../../assets/images/global-exception-parts_en.png)
 
-The globalization mechanism is based on a simple math calculation involving mainly these two integers:
-- _Base code_ - it is specified as an exception code: you pass it as the second parameter to an exception constructor.
+The exceptions' codes globalization mechanism is based on a simple math calculation involving mainly these two
+integers:
+- _Base code_ - it is specified as an initial exception code: you pass it as the second parameter to an exception
+constructor.
 - _Class code_ - that's the integer which transforms _base codes_ into _global_ ones becoming their "higher" part.
 It is configured in an exception class config.
 
@@ -64,7 +67,7 @@ and the _class code_ **456**.
 
 In most cases that is enough to have all your app exceptions codes unique. But sometimes you can not afford so small
 (or large) _base codes_. Such a case is described in the
-[_experienced_ section](../experienced/global-exception.md#inadecuate-base-code-maximum).
+[_experienced_ section](../experienced/global-exception.md#inappropriate-base-code-maximum).
 
 ## Setup
 
@@ -72,9 +75,10 @@ Let's imagine, you have an exception class called `UserException`. You can throw
 different codes. For instance you can throw an exception "_No money - no honey!_" with the code **5**. And you want
 this code (and other `UserException` codes) become _global_...
 
-1. Create an abstract exception class for all your application exceptions. It must extend **GlobalException**.
-1. Inside the class define the constant array `CLASS_CODE_LIST` with `UserException` fully qualified class name as its
-element key and a _class code_ as the element value:
+1. Create an abstract exception class (for instance let it be `AppException`) for all your application exceptions.
+It must extend **GlobalException**.
+1. Inside the class define the constant array `CLASS_CODE_LIST` with `UserException` qualified namespaced class name
+as its element key and a _class code_ as the element value:
 
     ```php
     use MagicPush\EnterpriseException\GlobalException;
@@ -87,8 +91,8 @@ element key and a _class code_ as the element value:
     }
     ```
 
-1. Extend `UserException` from `AppException` (or whatever name you give it).
-1. Create `UserException` objects as usual: global codes will be calculated automaticaly!
+1. Extend `UserException` from `AppException` (or whatever name you give your base exception class).
+1. Create `UserException` objects as usual: _global codes_ will be calculated automaticaly!
 
     ```php
     $e = new UserException('No money - no honey!', 5);
@@ -109,12 +113,13 @@ echo UserException::getCodeGlobal(123); // >> 4200123
 
 Defining an abstract base exception class is not obligatory but there are reasons for it:
 - You can define `CLASS_CODE_LIST` inside `UserException` and that will work perfectly. But it is more convenient to
-control your exceptions _class codes_ by observing all of them in one place.
-- You will definitely need such a setup if you wish to use [Parser](parser.md#prerequisites).
+control your exceptions _class codes_ by specifying all of them in one place.
+- You will definitely need a base exception class with the common _class codes_ list if you wish to use
+[Parser](parser.md#prerequisites).
 
 ### Overview example script
 
-This repository contains an example script with a few classes configured. Just launch it in a CLI:
+The repository contains an example script with a few classes configured. Just launch it in a CLI:
 
 ```php
 php examples/global.php
@@ -122,12 +127,12 @@ php examples/global.php
 
 ## Codes validation
 
-Every _class code_ and _base code_ are validated during a _global code_ construction. If any of the codes is
+Every _class code_ and _base code_ are validated during a _global code_ calculation. If any of the codes is
 considered invalid then a _base code_ is considered the only exception code and the globalization feature is disabled
 for that exception. You must consider these limits to keep your codes valid:
 - A _base code_ must be positive and less than **100000**.
     - Read the _experienced_ section if you want to
-    [alter the maximum](../experienced/global-exception.md#inadecuate-base-code-maximum).
+    [alter the maximum](../experienced/global-exception.md#inappropriate-base-code-maximum).
 - A _class code_ must be positive and less than the value returned by `getCodeClassMax()`.
     - Read the _experienced_ section if you want to
     [decrease the maximum](../experienced/global-exception.md#global-code-application-limit).

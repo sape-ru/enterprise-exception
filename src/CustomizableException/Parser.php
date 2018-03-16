@@ -95,9 +95,9 @@ abstract class Parser
      *                                  equal or smaller than the specified integer.
      *  * class_code_list_ex        => (array) [default: []] All classes but those with codes equal to the specified.
      *  * class_code_list_in        => (array) [default: []] Only classes with codes equal to the specified.
-     *  * class_name_part_list_ex   => (array) [default: []] All classes but those with fully qualified names
+     *  * class_name_part_list_ex   => (array) [default: []] All classes but those with qualified namespaced names
      *                                  containing the specified substrings (case sensitive).
-     *  * class_name_part_list_in   => (array) [default: []] Only classes with fully qualified names
+     *  * class_name_part_list_in   => (array) [default: []] Only classes with qualified namespaced names
      *                                  containing the specified substrings (case sensitive).
      *  * class_section_list_ex     => (array) [default: []] All classes but those with sections
      *                                  (CustomizableException::getClassSection()) equal to the specified;
@@ -394,7 +394,7 @@ abstract class Parser
      *
      * $parsed_data array always has two levels. The first level key can be:
      * * '__global' - for classes using GlobalException functionality;
-     * * a class fully qualified name - for other classes (a class code is always equal to 0 in this case);
+     * * a class qualified namespaced name - for other classes (a class code is always equal to 0 in this case);
      * * '__errors' - if $options['add_erros'] equals true and there are validations errors encountered.
      *
      * The second level key is an exception (global) code (which you get via \Exception::getCode()).
@@ -407,7 +407,7 @@ abstract class Parser
      * * base_code      => (int) An exception base code ($basis['base_code']); can equal to the second level key
      *                      if the globalization feature is disabled for that exception class.
      * * class_code     => (int) An exception class code ($basis['class_code']).
-     * * class_name     => (string) An exception class fully qualified name ($basis['class_name']).
+     * * class_name     => (string) An exception class qualified namespaced name ($basis['class_name']).
      * * class_section  => (string) An exception class section (CustomizableException::getClassSection()).
      * * context        => (string) An exception default contex,
      *                      'context' CustomizableException::EXCEPTIONS_PROPERTIES config property;
@@ -442,7 +442,7 @@ abstract class Parser
      * <pre>
      * * base_code  => (int) an exception base code (validated already)
      * * class_code => (int) an exception class code (validated already)
-     * * class_name => (string) a fully qualified exception class name (not blank)
+     * * class_name => (string) a qualified namespaced exception class name (not blank)
      * </pre>
      *
      * @return void
@@ -494,7 +494,7 @@ abstract class Parser
      *
      * @see Parser::parse() For the parser documentation.
      *
-     * @param string $class_name A fully qualified exception class name.
+     * @param string $class_name A qualified namespaced exception class name.
      *
      * @return void
      */

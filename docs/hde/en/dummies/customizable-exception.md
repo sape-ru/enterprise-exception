@@ -109,7 +109,7 @@ users_" (**301**) and you don't want users to see it's real message.
     }
     ```
 
-1. Throw exceptions with corresponding codes; add details if needed:
+1. Throw exceptions with corresponding codes; add _details_ if needed:
 
     ```php
     class BillingService
@@ -206,7 +206,8 @@ thrown if a user wants to activate his/her profile "pro" edition. And another ex
 buy a profile skin (I know you love such things you moneybag ;) ).
 
 You can just create two different exceptions with different messages.
-But you also can create only one exception and then add different contexts in different circumstances:
+But you also can create only one exception and then add different contexts via `setContext()` in different
+circumstances:
 
 ```php
 // enabling profiles "pro" edition...
@@ -254,8 +255,8 @@ class UserException extends CustomizableException
 
 ### Overview example script
 
-This repository contains an example script with a few classes and exceptions properties configured for a quick review
-of the built-in properties. Just launch it in a CLI:
+The repository contains an example script with a few classes and exceptions properties configured for a quick review
+of the supported properties. Just launch it in a CLI:
 
 ```php
 php examples/customizable.php
