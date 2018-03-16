@@ -6,12 +6,13 @@ require_once __DIR__ . '/resources/GlobalException/GEExampleB.php';
 require_once __DIR__ . '/resources/GlobalException/GEExampleC.php';
 
 use MagicPush\EnterpriseException\GlobalException;
+use MagicPush\EnterpriseException\Examples;
 
 $base_code = 2;
 $examples_to_show = [
-    new GEExampleA('', $base_code),
-    new GEExampleB('', $base_code),
-    new GEExampleC('', $base_code),
+    new Examples\GEExampleA('', $base_code),
+    new Examples\GEExampleB('', $base_code),
+    new Examples\GEExampleC('', $base_code),
 ];
 foreach ($examples_to_show as $e) {
     /** @var GlobalException $e */

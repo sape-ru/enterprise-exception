@@ -1,4 +1,5 @@
 <?php
+namespace MagicPush\EnterpriseException\Examples;
 
 use MagicPush\EnterpriseException\GlobalException;
 

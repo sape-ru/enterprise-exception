@@ -6,6 +6,7 @@ require_once __DIR__ . '/resources/CustomizableException/CEExampleA.php';
 require_once __DIR__ . '/resources/CustomizableException/CEExampleB.php';
 
 use MagicPush\EnterpriseException\CustomizableException\CustomizableException;
+use MagicPush\EnterpriseException\Examples;
 
 
 /**
@@ -28,9 +29,9 @@ function showExample(string $exception_class)
             'random value: ' . mt_rand(1, 1000) // exception details
         );
 
-        if ($e instanceof CEExampleA && 2 == $base_code) {
+        if ($e instanceof Examples\CEExampleA && 2 == $base_code) {
             $e->setContext('REPLACED context');
-        } elseif ($e instanceof CEExampleB && 1 == $base_code) {
+        } elseif ($e instanceof Examples\CEExampleB && 1 == $base_code) {
             $e->setContext('ADDED context');
         }
 
@@ -51,5 +52,5 @@ function showExample(string $exception_class)
 }
 
 
-showExample(CEExampleA::class);
-showExample(CEExampleB::class);
+showExample(Examples\CEExampleA::class);
+showExample(Examples\CEExampleB::class);
