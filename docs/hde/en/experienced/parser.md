@@ -1,7 +1,5 @@
 # Mastering Parser
 
-(source: [src/CustomizableException/Parser.php](../../../../src/CustomizableException/Parser.php))
-
 This article describes some ways of expanding [Parser](../dummies/parser.md) capabilities. If you're not familiar with
 the library basics then [go learn them](../dummies/about.md) first!
 
@@ -53,4 +51,4 @@ reference.
 
 - [Mastering GlobalException](global-exception.md)
 - [Mastering CustomizableException](customizable-exception.md)
-- [Parser basics](../dummies/customizable-exception.md)
+- [Parser basics](../dummies/parser.md)

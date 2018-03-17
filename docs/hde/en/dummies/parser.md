@@ -1,10 +1,8 @@
 # Parser
 
-(source: [src/CustomizableException/Parser.php](../../../../src/CustomizableException/Parser.php))
-
 `Parser::parse()` is used for... you won't believe it... _parsing_ [GlobalException](global-exception.md) and
 [CustomizableException](customizable-exception.md) descendants.
-![You don't say!](../../../assets/images/you-dont-say.jpg)
+<br/>![You don't say!](../../../assets/images/you-dont-say.jpg)
 
 Contents:
 - [What is it for](#what-is-it-for)

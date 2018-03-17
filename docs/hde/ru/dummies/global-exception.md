@@ -1,7 +1,5 @@
 # GlobalException
 
-(исходник: [src/GlobalException.php](../../../../src/GlobalException.php))
-
 Содержание:
 - [Проблема](#проблема)
 - [Решение](#решение)

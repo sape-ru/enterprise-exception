@@ -22,6 +22,12 @@ Contents:
     - [... CustomizableException](experienced/customizable-exception.md)
     - [... Parser](experienced/parser.md)
 
+You can install the library by [cloning the repository]({{ site.github.repository_url }}) or via **composer**:
+
+```
+composer require magic-push/enterprise-exception
+```
+
 If this guide needs any fixes, polishing or additions, if you still don't understand something about
 **EnterpriseException** then feel free to [create an issue]({{ site.github.repository_url }}/issues) with
 "_documentation_" label! I'll do my best to update this guide so it could become more useful and the library usage

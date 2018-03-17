@@ -1,10 +1,8 @@
 # Parser
 
-(исходник: [src/CustomizableException/Parser.php](../../../../src/CustomizableException/Parser.php))
-
 `Parser::parse()` применяется для... не поверите... _парсинга_ наследников [GlobalException](global-exception.md) и
 [CustomizableException](customizable-exception.md).
-![You don't say!](../../../assets/images/you-dont-say.jpg)
+<br/>![You don't say!](../../../assets/images/you-dont-say.jpg)
 
 Содержание:
 - [Зачем это нужно](#зачем-это-нужно)

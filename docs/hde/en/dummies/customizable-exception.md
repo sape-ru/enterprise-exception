@@ -1,8 +1,5 @@
 # CustomizableException
 
-(source:
-[src/CustomizableException/CustomizableException.php](../../../../src/CustomizableException/CustomizableException.php))
-
 **CustomizableException** can solve many problems (it is called _customizable_ for a reason). One of possible problems
 and its solution are described here in this article for the built-in features illustration. Read the
 [_experienced_ section](../experienced/customizable-exception.md) for tweaks instructions.
@@ -103,7 +100,7 @@ users_" (**301**) and you don't want users to see it's real message.
             ],
             self::FORBIDDEN_UNRELIABLE => [
                 'message' => 'The operation is forbidden for unreliable users',
-                'show_fe' => false,' // may be ommitted because it's the default behavior
+                'show_fe' => false, // may be ommitted because it's the default behavior
             ],
         ];
     }

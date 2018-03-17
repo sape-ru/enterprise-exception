@@ -1,8 +1,5 @@
 # Углублённое изучение CustomizableException
 
-(исходник:
-[src/CustomizableException/CustomizableException.php](../../../../src/CustomizableException/CustomizableException.php))
-
 Данная статья посвящена тонкой настройке [CustomizableException](../dummies/customizable-exception.md). Если вы ещё не
 знакомы с основным функционалом библиотеки, [изучите его](../dummies/about.md) в первую очередь!
 

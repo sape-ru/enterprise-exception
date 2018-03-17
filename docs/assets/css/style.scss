@@ -4,7 +4,7 @@
 @import "{{ site.theme }}";
 
 .container {
-    max-width: 70%;
+    max-width: 840px;
 }
 
 code.highlighter-rouge {
@@ -13,4 +13,8 @@ code.highlighter-rouge {
     font-family: monospace;
     font-size: 90%;
     padding: 4px;
+}
+
+th {
+  border-bottom: none;
 }

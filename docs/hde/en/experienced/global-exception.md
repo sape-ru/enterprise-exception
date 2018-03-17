@@ -1,7 +1,5 @@
 # Mastering GlobalException
 
-(source: [src/GlobalException.php](../../../../src/GlobalException.php))
-
 Sometimes you need more flexibility with [GlobalException](../dummies/global-exception.md). This article describes some
 unordinary cases and their possible solutions. If you're not familiar with the library basics then
 [go learn them](../dummies/about.md) first!
@@ -79,8 +77,8 @@ echo AnotherException::getCodeGlobal(1) . "\n"; // >> 2900001
 ```
 
 At the same time and for the same reason you should **not** set `AnotherException` _class code_ to **29000**.
-Otherwise it is possible to generate _global codes_ duplicates (and [Parser](../dummies/parser.md) will throw an
-exception for this case).
+Otherwise it is possible to generate _global codes_ duplicates (and [Parser](../dummies/parser.md#validating-classes)
+will throw an exception for this case).
 
 ## Global code application limit
 

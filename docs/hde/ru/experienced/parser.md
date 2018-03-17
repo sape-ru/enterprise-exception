@@ -1,7 +1,5 @@
 # Углублённое изучение Parser
 
-(исходник: [src/CustomizableException/Parser.php](../../../../src/CustomizableException/Parser.php))
-
 Данная статья посвящена ряду способов расширить возможности [Parser](../dummies/parser.md).
 Если вы ещё не знакомы с основным функционалом библиотеки, [изучите его](../dummies/about.md) в первую очередь!
 
@@ -53,4 +51,4 @@
 
 - [Углублённое изучение GlobalException](global-exception.md)
 - [Углублённое изучение CustomizableException](customizable-exception.md)
-- [Основы Parser](../dummies/customizable-exception.md)
+- [Основы Parser](../dummies/parser.md)

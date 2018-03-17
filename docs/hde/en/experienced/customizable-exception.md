@@ -1,8 +1,5 @@
 # Mastering CustomizableException
 
-(source:
-[src/CustomizableException/CustomizableException.php](../../../../src/CustomizableException/CustomizableException.php))
-
 This article describes some ways of tweaking [CustomizableException](../dummies/customizable-exception.md).
 If you're not familiar with the library basics then [go learn them](../dummies/about.md) first!
 

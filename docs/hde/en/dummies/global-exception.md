@@ -1,7 +1,5 @@
 # GlobalException
 
-(source: [src/GlobalException.php](../../../../src/GlobalException.php))
-
 Contents:
 - [Problem](#problem)
 - [Solution](#solution)

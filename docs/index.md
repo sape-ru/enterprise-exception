@@ -1,2 +1,3 @@
-| [![English](assets/images/flag_en.png)](hde/en/contents.md) | [![Русский](assets/images/flag_ru.png)](hde/ru/contents.md) |
+| [<img src="assets/images/flag_en.png" alt="English">](hde/en/contents.md) | [<img src="assets/images/flag_ru.png" alt="Русский">](hde/ru/contents.md) |
 | --- | --- |
+|  |  |

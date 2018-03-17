@@ -1,8 +1,5 @@
 # CustomizableException
 
-(исходник:
-[src/CustomizableException/CustomizableException.php](../../../../src/CustomizableException/CustomizableException.php))
-
 **CustomizableException** позволяет решить множество проблем (этот класс назван _customizable_, т. е. _настраиваемым_
 не просто так). Одна из возможных проблем и её решение описаны в этой статье для иллюстрации встроенного
 функционала. Обратитесь к [разделу _для опытных_](../experienced/customizable-exception.md) за инструкциями по тонкой
@@ -109,7 +106,7 @@ echo $e->getMessage(); // >> 'осталось 2 попытки'
             ],
             self::FORBIDDEN_UNRELIABLE => [
                 'message' => 'Операция недоступна для ненадёжных пользователей',
-                'show_fe' => false,' // можно не указывать, т. к. это - поведение по умолчанию
+                'show_fe' => false, // можно не указывать, т. к. это - поведение по умолчанию
             ],
         ];
     }
