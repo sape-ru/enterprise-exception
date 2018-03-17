@@ -2,14 +2,14 @@
 
 A PHP library for large web applications exceptions management.
 
-This readme is written in the _TL;DR_-style. The full-scale guide "_HOWTO for dummies and experts_" is planned
-to be written as separate document (possibly wiki-style pages) in near future.
+This readme is written in the _TL;DR_-style. There is the full-scale guide
+["_HOWTO for dummies and experienced_"](https://magicpush.github.io/enterprise-exception/) (english and russian
+versions) powered by GitHub Pages. Also you can access it [offline](docs/index.md).
 
 - [What is it for](#what-is-it-for)
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage or HOWTO lite edition](#usage-or-howto-lite-edition)
-- [Near future plans](#near-future-plans)
 - [If you want to contribute](#if-you-want-to-contribute)
 
 ## What is it for
@@ -58,11 +58,6 @@ There are several ways to install the library:
     ```
 
 - GIT: clone / fork / the repository, include as submodule etc.
-- Manual #1: Download the repository :smile:.
-- Manual #2 (your tasks related source only):
-    - Download [GlobalException.php](src/GlobalException.php) file for the exceptions codes globalization
-    feature.
-    - Download the whole [src](src) folder for exceptions customizing and parsing functionality.
 
 ## Usage or HOWTO lite edition
 
@@ -87,8 +82,8 @@ qualified namespaced names as keys and their own (class) codes as values.
 
 ### For exceptions customization
 
-That's trickier; you should read the PHPDoc (or the full guide when it is written) for better understanding.
-But for a start:
+That's trickier; you should read the PHPDoc or the [_HOWTO_ guide](https://magicpush.github.io/enterprise-exception/)
+for better understanding. But for a start:
 
 1. Your base exception class must extend [CustomizableException](src/CustomizableException/CustomizableException.php).
 1. All the classes you want customizable exceptions for must extend your base exception class (previously mentioned).
@@ -106,10 +101,6 @@ exception class. Like for the [globalization](#for-codes-globalization), but you
 you don't want to use the globalization feature itself.
 1. Call [Parser](src/CustomizableException/Parser.php)::parse() method with options and/or filters you desire!
 
-## Near future plans
-
-- **2018-03-31**: _the "HOWTO for dummies and experts" guide_.
-
 ## If you want to contribute
 
-Feel free to read the [contribution guide](CONTRIBUTING.md).
+Read the [contribution guide](CONTRIBUTING.md) to know more.
