@@ -1,35 +1,38 @@
 # HISTORY
 
-This history log references the relevant changes like:
-- new functionality
-- fixes
-- changes to methods signatures
-- PHP version related changes
-- significant optimization
+This history log references the repository releases which respect [semantic versioning](https://semver.org/).
 
-Irrelevant changes that will not be mentioned here:
-- refactoring
-- documentation changes (readme, PHPDoc, etc.)
-- adding/updating/deleting examples
+## 2.2.0 (2018-03-17)
 
-And here goes the history itself...
+### New features
+
+- ["_HOWTO for dummies and experienced_"](https://magicpush.github.io/enterprise-exception/) guide (english and russian
+versions) powered by GitHub Pages.
+
+### Fixes
+
+- PHPDoc fixes.
+
+### Other
+
+- The classes for examples scripts are updated with namesapces - for better illustration.
 
 ## 2.1.0 (2018-02-23)
 
-#### New features:
+### New features
 
 - [composer.json](composer.json) added for registering this library to **Packagist**.
 - [GlobalException](src/GlobalException.php)::**getCodeClassMax()** public method
 for the biggest class code public access.
 - [Parser](src/CustomizableException/Parser.php)::**parse()** new option '_add_errors_' - to suppress validations errors
-(like '_ignore_invalid_' option) and also add those errors messages to the output under the '_\_\_errors_' key.
+(like '_ignore_invalid_' option) and also add those errors messages to the output under '_\_\_errors_' key.
 
-#### Fixes:
+### Fixes
 
 - [Parser](src/CustomizableException/Parser.php)::**parse()** crash when trying to filter
 [GlobalException](src/GlobalException.php) descendants by class sections.
 
-#### Other:
+### Other
 
 - [CustomizableException](src/CustomizableException/CustomizableException.php)::**getCodeFormatted()**
 is moved to [GlobalException](src/GlobalException.php).

@@ -4,11 +4,11 @@ namespace MagicPush\EnterpriseException;
 /**
  * The exception class used for globalizing exceptions' codes.
  *
- * Will globalize it's codes only after the CLASS_CODE_LIST config is set properly. You must extend this class with
- * your project base exception class (PBEC) and set up the config there mentioning all exceptions classes you want
- * to globalize (and all those exceptions classes must be subclasses of PBEC).
+ * Will globalize its codes only after CLASS_CODE_LIST config is set properly. You must extend this class with
+ * your project base exception class (PBEC) and set up the config there mentioning all exception classes you want
+ * to globalize (and all those exception classes must be subclasses of PBEC).
  *
- * Also this class can be used and act like the classic \Exception if you don't set up the CLASS_CODE_LIST config.
+ * Also this class can be used and act like the classic \Exception if you don't set up CLASS_CODE_LIST config.
  *
  * @see GlobalException::CLASS_CODE_LIST    For checking / setting up the config.
  *
@@ -23,7 +23,7 @@ abstract class GlobalException extends \Exception
      *
      * Used for calculating a class code maximum depending on the base code scale (CLASS_CODE_MULTIPLIER)
      * to ensure that the biggest possible base code combining with the biggest class code
-     * will not turn into an integer bigger than the PHP integer maximum or your custom maximum.
+     * will not turn into an integer bigger than PHP integer maximum or your custom maximum.
      *
      * @see GlobalException::CLASS_CODE_MULTIPLIER  For checking / specifying the base code scale.
      */
@@ -35,7 +35,7 @@ abstract class GlobalException extends \Exception
     /**
      * @var array|int[] The central config for globalizing exceptions' codes.
      *
-     * The array key must be a fully qualified class name (AnyClass::class) or it will be ignored -
+     * The array key must be a qualified namespaced class name (AnyClass::class) or it will be ignored -
      * not found while getting a class code (::getCodeClass()).
      * The array value (a class code) should be a positive integer to enable the globalization feature for that class.
      * A class code equivalent to 0 disables the globalization feature for that class
@@ -45,7 +45,7 @@ abstract class GlobalException extends \Exception
      *
      * @see GlobalException::getCodeClass()         For a class code determining rules.
      * @see GlobalException::validateCodeClass()    For a class code validation rules.
-     * @see GlobalException::getCodeParts()         For a global code decomposition algorythm.
+     * @see GlobalException::getCodeParts()         For a global code decomposition algorithm.
      */
     const CLASS_CODE_LIST = [];
 
@@ -63,13 +63,13 @@ abstract class GlobalException extends \Exception
      * Returns the valid class code based on the calling class.
      *
      * Returns 0 for the invalid class code (::validateCodeClass()).
-     * The class code is extracted from the CLASS_CODE_LIST config.
+     * The class code is extracted from CLASS_CODE_LIST config.
      *
-     * Initially this method is called in the ::getCodeGlobal() to calculate an exception global code.
+     * Initially this method is called in ::getCodeGlobal() to calculate an exception global code.
      *
      * @see GlobalException::validateCodeClass()    For a class code validation rules.
      * @see GlobalException::CLASS_CODE_LIST        For checking / setting up the config.
-     * @see GlobalException::getCodeGlobal()        For a global code calculation algorythm.
+     * @see GlobalException::getCodeGlobal()        For a global code calculation algorithm.
      *
      * @return int The valid class code.
      */
@@ -94,7 +94,7 @@ abstract class GlobalException extends \Exception
     /**
      * Returns the biggest class code possible.
      *
-     * This method is finalized intentionally. The calculation is based on the GLOBAL_CODE_MAX_RELATIVE and
+     * This method is finalized intentionally. The calculation is based on GLOBAL_CODE_MAX_RELATIVE and
      * CLASS_CODE_MULTIPLIER values. Redefine these if you want to change possible results.
      *
      * @see GlobalException::GLOBAL_CODE_MAX_RELATIVE   For checking / setting the value.
@@ -102,7 +102,7 @@ abstract class GlobalException extends \Exception
      *
      * @return int the biggest class code possible
      */
-    public static final function getCodeClassMax(): int
+    final public static function getCodeClassMax(): int
     {
         return intval(floor(static::GLOBAL_CODE_MAX_RELATIVE / static::CLASS_CODE_MULTIPLIER) - 1);
     }
@@ -110,9 +110,9 @@ abstract class GlobalException extends \Exception
     /**
      * Returns the formatted code of an exception to use in different exception string representations.
      *
-     * Initially it returns the GlobalException::getCodeGlobal() as a string.
+     * Initially it returns GlobalException::getCodeGlobal() as a string.
      *
-     * @see GlobalException::getCodeGlobal()    For a global code calculation algorythm.
+     * @see GlobalException::getCodeGlobal()    For a global code calculation algorithm.
      *
      * @param int $base_code An exception base (or full when not global) code.
      *
@@ -127,8 +127,8 @@ abstract class GlobalException extends \Exception
      * Returns the calculated valid exception code based on the calling class.
      *
      * This exception code may be considered global if the calling class code is set properly
-     * in the CLASS_CODE_LIST config (::getCodeClass()). If so and the $base_code is valid (::validateCodeBase())
-     * the global code is calculated using the $base_code, the class code and the CLASS_CODE_MULTIPLIER
+     * in CLASS_CODE_LIST config (::getCodeClass()). If so and $base_code is valid (::validateCodeBase())
+     * the global code is calculated using $base_code, the class code and CLASS_CODE_MULTIPLIER
      * (as a base code scale).
      *
      * Initially this method is called in the constructor,  but it also can be used for compairing an exception code
@@ -161,10 +161,10 @@ abstract class GlobalException extends \Exception
      *
      * Decomposes the global code (based on CLASS_CODE_MULTIPLIER) into class and base codes and returns them as
      * an associative array. If the base code or the class code are considered invalid (::validateCodeBase(),
-     * ::validateCodeClass()) then the base code equals the $global_code and the class code equals 0.
+     * ::validateCodeClass()) then the base code equals $global_code and the class code equals 0.
      *
-     * This method can be called from any subclasses of the GlobalException (and the class itself). But be warned
-     * that the CLASS_CODE_MULTIPLIER used for decomposing the $global_code is taken from the calling class.
+     * This method can be called from any subclasses of GlobalException (and the class itself). But be warned
+     * that CLASS_CODE_MULTIPLIER used for decomposing $global_code is taken from the calling class.
      *
      * This is a tool method which is not used initially inside this library.
      *
@@ -201,13 +201,13 @@ abstract class GlobalException extends \Exception
     /**
      * Checks if the base code is valid to be a part of an exception global code.
      *
-     * The validation is based the CLASS_CODE_MULTIPLIER value.
+     * The validation is based on CLASS_CODE_MULTIPLIER value.
      *
-     * Initially this method is called in the ::getCodeGlobal() and ::getCodeParts().
+     * Initially this method is called in ::getCodeGlobal() and ::getCodeParts().
      *
-     * @see GlobalException::CLASS_CODE_MULTIPLIER  Used to be compared with the $base_code.
-     * @see GlobalException::getCodeGlobal()        For a global code calculation algorythm.
-     * @see GlobalException::getCodeParts()         For a global code decomposition algorythm.
+     * @see GlobalException::CLASS_CODE_MULTIPLIER  Used to be compared with $base_code.
+     * @see GlobalException::getCodeGlobal()        For a global code calculation algorithm.
+     * @see GlobalException::getCodeParts()         For a global code decomposition algorithm.
      *
      * @param int $base_code The base code to validate.
      *
@@ -232,16 +232,16 @@ abstract class GlobalException extends \Exception
     /**
      * Checks if the class code is valid to be a part of an exception global code.
      *
-     * The validation is based on the ::getCodeClassMax() result to determine if a hypothetical global code would be
-     * bigger than the PHP integer maximum or your custom maximum (specified in the GLOBAL_CODE_MAX_RELATIVE constant).
+     * The validation is based on ::getCodeClassMax() result to determine if a hypothetical global code would be
+     * bigger than PHP integer maximum or your custom maximum (specified in GLOBAL_CODE_MAX_RELATIVE constant).
      * It also checks if the class code equals to 0 or positive.
      *
-     * Initially this method is called in the ::getCodeClass() and ::getCodeParts().
+     * Initially this method is called in ::getCodeClass() and ::getCodeParts().
      *
      * @see GlobalException::getCodeClassMax()          For the biggest class code calculation.
      * @see GlobalException::GLOBAL_CODE_MAX_RELATIVE   The relative maximum exception global code possible.
      * @see GlobalException::getCodeClass()             For a class code determining rules.
-     * @see GlobalException::getCodeParts()             For a global code decomposition algorythm.
+     * @see GlobalException::getCodeParts()             For a global code decomposition algorithm.
      *
      * @param int $class_code The class code to validate.
      *
@@ -278,9 +278,9 @@ abstract class GlobalException extends \Exception
      * GlobalException constructor.
      *
      * The only difference is a calculated global code (::getCodeGlobal()) passed to the parent constructor.
-     * Also the base code is stored inside the exception object and can be returned by the ::getCodeBase().
+     * Also the base code is stored inside the exception object and can be returned by ::getCodeBase().
      *
-     * @see GlobalException::getCodeGlobal()    For a global code calculation algorythm.
+     * @see GlobalException::getCodeGlobal()    For a global code calculation algorithm.
      * @see GlobalException::getCodeBase()      For getting the base code.
      *
      * @param string $message [optional] The exception message to throw.

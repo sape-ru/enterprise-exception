@@ -1,7 +1,8 @@
 <?php
+namespace MagicPush\EnterpriseException\Examples;
 
 /**
- * The GlobalException class example.
+ * GlobalException class example.
  *
  * @package Examples\GlobalException
  */
