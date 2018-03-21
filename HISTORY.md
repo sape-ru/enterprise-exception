@@ -15,7 +15,7 @@ versions) powered by GitHub Pages.
 
 ### Other
 
-- The classes for examples scripts are updated with namesapces - for better illustration.
+- The classes for examples scripts are updated with namespaces - for better illustration.
 
 ## 2.1.0 (2018-02-23)
 
@@ -57,3 +57,4 @@ updates are possible but not on a regular basis.
 
 The idea of global and customizable exceptions was implemented for the first time. It was used for a @sape-ru project
 I continuously develop.
+

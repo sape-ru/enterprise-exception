@@ -58,6 +58,7 @@ There are several ways to install the library:
     ```
 
 - GIT: clone / fork / the repository, include as submodule etc.
+- Download the repository (or at least the _"[/src](/src)"_ folder).
 
 ## Usage or HOWTO lite edition
 
@@ -104,3 +105,4 @@ you don't want to use the globalization feature itself.
 ## If you want to contribute
 
 Read the [contribution guide](CONTRIBUTING.md) to know more.
+
