@@ -278,7 +278,7 @@ array (
       'class_name' => 'MyCoolException',
       'class_section' => '',
       'context' => '',
-      'message' => 'Something bad happened,
+      'message' => 'Something bad happened',
       'message_fe' => '',
       'show_fe' => false,
     ),
@@ -331,3 +331,4 @@ php examples/parser.php
 - [GlobalException](global-exception.md)
 - [CustomizableException](customizable-exception.md)
 - [Mastering Parser](../experienced/parser.md)
+
