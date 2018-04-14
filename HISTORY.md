@@ -2,6 +2,12 @@
 
 This history log references the repository releases which respect [semantic versioning](https://semver.org/).
 
+## 2.2.1 (2018-04-14)
+
+### Fixes
+
+- Composer PHP 7.2 version requirement (7.2 -> ^7.2)
+
 ## 2.2.0 (2018-03-17)
 
 ### New features
