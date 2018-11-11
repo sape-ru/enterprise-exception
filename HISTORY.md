@@ -2,6 +2,18 @@
 
 This history log references the repository releases which respect [semantic versioning](https://semver.org/).
 
+## 2.3.0 (2018-11-11)
+
+### Improvements
+
+- [CustomizableException](src/CustomizableException/CustomizableException.php)::**getL10N()** first parameter type is
+changed from 'string' to 'mixed' (for instance if you want to pass an array of arguments to your translation function).
+    - The same thing is done for
+[CustomizableException](src/CustomizableException/CustomizableException.php)::**setContext()** _$value_
+    - The same thing is done for
+      [CustomizableException](src/CustomizableException/CustomizableException.php)::**__construct()** _$details_
+- ["_HOWTO_"](https://magicpush.github.io/enterprise-exception/) guide is updated to reflect these changes.
+
 ## 2.2.1 (2018-04-14)
 
 ### Fixes
