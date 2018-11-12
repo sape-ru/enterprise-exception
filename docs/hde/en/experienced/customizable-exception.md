@@ -61,11 +61,13 @@ contact email / page link or anything else you consider non-confidential and use
 ## Translation wrapper
 
 [CustomizableException](../dummies/customizable-exception.md#setup) and [Parser](../dummies/parser.md#data-returned)
-basics articles mention the translation wrapper `getL10N()`. Initially this public static method just returns the
-input string as is. But you can redefine and extend this method with your application translation mechanism.
+basics articles mention the translation wrapper `getL10N()`. Initially this public static method just returns its first
+argument (assuming it has a type of string) as is. But you can redefine and extend this method with your application
+translation mechanism.
 
-This method has two parameters. The first is the string to translate. The second is the translation locale. You can
-specify here not only the locale name string but also `false` or `null`:
+This method has two parameters. The first is the string to translate or an argument of any other type you need for
+passing to your translation function. The second is the translation locale.
+You can specify here not only the locale name string but also `false` or `null`:
 - `false` value should be treated as disabling any translation. It is useful when you want to be sure a string
 passed to the wrapper is returned as is. Sometimes you can't control if the wrapper is used or not so `false`
 value might be the solution for this case.
@@ -92,15 +94,15 @@ You can call this wrapper manually if you wish. But it is also called implicitly
 parts while composing parsed data output - you can specify any locale you wish in '_locale_' option (the default
 value is `L10N_SYSTEM_LOCALE`).
 
-The constructor calls `getL10N` twice - for _system_ and _frontend_ version of an exception _context_ and _base
-message_:
+The constructor calls `getL10N` twice - for _system_ and _frontend_ version of an exception _context_, _base message_
+and _details_:
 1. The _system_ version is made by passing `L10N_SYSTEM_LOCALE` as `$locale` value. The
 [composed message](#full-message-composer) is passed then to a parent constructor so you can get the original message
 for logs or admin interfaces.
-1. The _frontend_ version is made by passing `null` as `$locale` value. Then the _context_ and _base message_
-are accessible separately via `getContext()` and `getMessageBase()` accordingly; also these parts are used for the
-frontend [full message](#full-message-composer) composed in `getMessageFe()` (if an exception message is configured
-as frontend-visible).
+1. The _frontend_ version is made by passing `null` as `$locale` value. Then the _context_, _base message_ and
+_details_ are accessible separately via `getContext()`, `getMessageBase()` and `getDetails()` accordingly;
+also these parts are used for the frontend [full message](#full-message-composer) composed in `getMessageFe()`
+(if an exception message is configured as frontend-visible).
 
 ## Default base message
 

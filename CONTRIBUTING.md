@@ -46,5 +46,6 @@ your commits will obviously get my name and email) or deleted.
 There are no other strict rules for PHPDoc style. I tried to follow the abandoned
 [PSR-5](https://github.com/phpDocumentor/fig-standards/blob/master/proposed/phpdoc.md) when possible but also made
 some differences according to my IDE hinting - because the suggested recomendation didn't work.
-For instance you can encounter an array elements description enclosed into _\<pre\>_ tags. Alse some functions doc
+For instance you can encounter an array elements description enclosed into _\<pre\>_ tags. Also some functions doc
 blocks have _\@noinspection_ tags to suppress local IDE inspections.
+
