@@ -187,11 +187,9 @@ abstract class CustomizableException extends GlobalException
      * * in ::getMessageFeStub() for the 'error' string (using frontend culture)
      * * when an exception context, base message or details are returned via ::getContext(), ::getMessageBase()
      * and ::getDetails() respectively;
-     * * in ::getMessageFe() for ::getMessageFeStub() returned value translation;
      * * in Parser::parse() for the message parts specified in EXCEPTIONS_PROPERTIES configs.
      *
-     * Initially this is a stub which returns $text_or_arguments_array without any changes
-     * (but the 'string' return type is expected).
+     * Initially this is a stub which returns $text_or_arguments_array without any changes.
      * It is your job to redefine this method and provide it with the translation algorithm you desire.
      * Many popular frameworks have such a feature implementation already.
      * Just call the needed function passing it the arguments this method gets.
@@ -208,13 +206,14 @@ abstract class CustomizableException extends GlobalException
      * @param string|bool|null $locale [optional] The locale used for the translation.
      * If equals false then no translation is made.
      *
-     * @return string The translation of $text_or_arguments_array.
+     * @return mixed The translation of $text_or_arguments_array
+     * or $text_or_arguments_array unprocessed if $locale equals false.
      */
     public static function getL10N(
         $text_or_arguments_array,
         /** @noinspection PhpUnusedParameterInspection */
         $locale = null
-    ): string {
+    ) {
         return $text_or_arguments_array;
     }
 
@@ -269,7 +268,6 @@ abstract class CustomizableException extends GlobalException
      *
      * Initially it is returned by ::getMessageFe() if an exception $\_show_fe property equals false.
      * That is when you don't want user to see that exception real message.
-     * Also in that case it is translated via ::getL10N().
      *
      * Initially this method uses GlobalException::getCodeFormatted() value to let users know an exception code
      * so they can then send it to support and ask for help.
@@ -285,13 +283,14 @@ abstract class CustomizableException extends GlobalException
      * @see GlobalException::getCodeFormatted()     For an exception code formatting algorithm.
      *
      * @param int $base_code An exception base (or full when not global) code.
+     * @param string|bool|null $locale [optional] The locale used for the translation; passed to ::getL10N().
      *
      * @return mixed The frontend message stub.
      * Might be a string or the arguments for your translation function.
      */
-    public static function getMessageFeStub(int $base_code)
+    public static function getMessageFeStub(int $base_code, $locale = null)
     {
-        return static::getL10N('error') . ' ' . static::getCodeFormatted($base_code);
+        return static::getL10N('error', $locale) . ' ' . static::getCodeFormatted($base_code);
     }
 
 
@@ -449,10 +448,10 @@ abstract class CustomizableException extends GlobalException
         // the system version of an exception message
         parent::__construct(
             static::getMessageComposed(
-                static::getL10N($this->getMessageBaseRaw(), static::L10N_SYSTEM_LOCALE),
+                $this->getMessageBase(static::L10N_SYSTEM_LOCALE),
                 [
-                    'context' => static::getL10N($this->getContextRaw(), static::L10N_SYSTEM_LOCALE),
-                    'details' => static::getL10N($this->getDetailsRaw(), static::L10N_SYSTEM_LOCALE),
+                    'context' => $this->getContext(static::L10N_SYSTEM_LOCALE),
+                    'details' => $this->getDetails(static::L10N_SYSTEM_LOCALE),
                 ]
             ),
             $base_code,
@@ -492,27 +491,14 @@ abstract class CustomizableException extends GlobalException
      * @see CustomizableException::getL10N()                For the translation mechanism.
      * @see CustomizableException::setContext()             For setting the value during runtime.
      *
-     * @param string|bool|null $locale [optional] The locale used for the translation; passed to ::getL10N()
+     * @param string|bool|null $locale [optional] The locale used for the translation; passed to ::getL10N().
      *
-     * @return string The translated exception context.
+     * @return mixed The translated exception context
+     * or (if $locale equals false) unprocessed context data of any type.
      */
-    public function getContext($locale = null): string
+    public function getContext($locale = null)
     {
         return static::getL10N($this->_context, $locale);
-    }
-
-    /**
-     * Returns the exception raw (untranslated) context (where it happened; the subject).
-     *
-     * @see CustomizableException::EXCEPTIONS_PROPERTIES    For setting the default value
-     *                                                      ('context' config property).
-     * @see CustomizableException::setContext()             For setting the value during runtime.
-     *
-     * @return mixed The exception raw (untranslated) context.
-     */
-    public function getContextRaw()
-    {
-        return $this->_context;
     }
 
     /**
@@ -523,27 +509,14 @@ abstract class CustomizableException extends GlobalException
      * @see CustomizableException::getL10N()        For the translation mechanism.
      * @see CustomizableException::__construct()    For the exception construction algorithm.
      *
-     * @param string|bool|null $locale [optional] The locale used for the translation; passed to ::getL10N()
+     * @param string|bool|null $locale [optional] The locale used for the translation; passed to ::getL10N().
      *
-     * @return string The exception translated details.
+     * @return mixed The exception translated details
+     * or (if $locale equals false) unprocessed details data of any type.
      */
-    public function getDetails($locale = null): string
+    public function getDetails($locale = null)
     {
         return static::getL10N($this->_details, $locale);
-    }
-
-    /**
-     * Returns the exception raw (untranslated) details (what exact value is invalid, what is expected etc.).
-     *
-     * This value is set in the constructor only by being passed as one of its parameters.
-     *
-     * @see CustomizableException::__construct()    For the exception construction algorithm.
-     *
-     * @return mixed The exception raw (untranslated) details.
-     */
-    public function getDetailsRaw()
-    {
-        return $this->_details;
     }
 
     /**
@@ -558,28 +531,14 @@ abstract class CustomizableException extends GlobalException
      * @see CustomizableException::__construct()            For the exception construction algorithm where this value
      *                                                      is set depending on circumstances.
      *
-     * @param string|bool|null $locale [optional] The locale used for the translation; passed to ::getL10N()
+     * @param string|bool|null $locale [optional] The locale used for the translation; passed to ::getL10N().
      *
-     * @return string The exception translated base message.
+     * @return mixed The exception translated base message
+     * or (if $locale equals false) unprocessed base message data of any type.
      */
-    public function getMessageBase($locale = null): string
+    public function getMessageBase($locale = null)
     {
         return static::getL10N($this->_message_base, $locale);
-    }
-
-    /**
-     * Returns the exception raw (untranslated) base message.
-     *
-     * @see CustomizableException::EXCEPTIONS_PROPERTIES    For configuring the value
-     *                                                      ('message' and 'message_fe' config properties).
-     * @see CustomizableException::__construct()            For the exception construction algorithm where this value
-     *                                                      is set depending on circumstances.
-     *
-     * @return mixed The exception raw (untranslated) base message.
-     */
-    public function getMessageBaseRaw()
-    {
-        return $this->_message_base;
     }
 
     /**
@@ -589,7 +548,7 @@ abstract class CustomizableException extends GlobalException
      * ::canShowFe() value.
      * If true then ::getMessageComposed() value is returned (using ::getMessageBase(), ::getContext()
      * and ::getDetails() returned values).
-     * ::getMessageFeStub() processed by ::getL10N() is returned otherwise.
+     * ::getMessageFeStub() is returned otherwise.
      *
      * @see CustomizableException::canShowFe()          For checking if the exception message can be shown
      *                                                  in frontend interfaces
@@ -600,15 +559,16 @@ abstract class CustomizableException extends GlobalException
      * @see CustomizableException::getMessageFeStub()   For the stub composing algorithm.
      * @see CustomizableException::getL10N()            For the translation mechanism.
      *
-     * @param string|bool|null $locale [optional] The locale used for the translation; passed to ::getL10N()
-     * and translated message parts getters.
+     * @param string|bool|null $locale [optional] The locale used for the translation via ::getL10N();
+     * passed to inner methods for translation.
      *
-     * @return string The exception frontend message.
+     * @return mixed The exception frontend message
+     * or (if $locale equals false) its unprocessed version of any type.
      */
-    public function getMessageFe($locale = null): string
+    public function getMessageFe($locale = null)
     {
         if (!$this->canShowFe()) {
-            return static::getL10N(static::getMessageFeStub($this->getCodeBase()), $locale);
+            return static::getMessageFeStub($this->getCodeBase(), $locale);
         }
 
         return static::getMessageComposed(
