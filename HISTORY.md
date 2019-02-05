@@ -2,15 +2,15 @@
 
 This history log references the repository releases which respect [semantic versioning](https://semver.org/).
 
-## 2.4.0 (2019-02-04)
+## 3.0.0 (2019-02-05)
 
 ### Improvements
 - All [CustomizableException](src/CustomizableException/CustomizableException.php) message parts are now stored in
 raw state.
-    - The getters **getContext()**, **getDetails()** and **getMessageBase()** include **getL10N()** call and
-the _$locale_ parameter.
-        - So **setContext()** doesn't call **getL10N()** anymore.
-    - The _$locale_ parameter is also added to **getMessageFeStub()** and **getMessageFe()**.
+    - The getters **getContext()**, **getDetails()** and **getMessageBase()** include **getL10N()** call.
+    - **setContext()** doesn't call **getL10N()** anymore.
+- :exclamation: Compatibility break :exclamation: The _$locale_ parameter is added to **getContext()**,
+**getDetails()**, **getMessageBase()**, **getMessageFeStub()** and **getMessageFe()**.
 - Return values type hints are removed for several methods in case if you want these methods to return raw
 (untranslated) string or array of arguments: **getContext()**, **getDetails()**, **getMessageBase()**,
 **getL10N()**, **getMessageFeStub()**, **getMessageDefault()**, **getMessageUnknown()**, **getMessageFe()**.
