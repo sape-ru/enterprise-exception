@@ -46,7 +46,7 @@ If so then you should use [Parser](#for-customizable-exceptions-parsing).
 
 ## Requirements
 - Core PHP v7.0+
-    - at least there is no incompatible code for v7.1 and v7.2
+    - at least there is no incompatible code for v7.1 - v7.3
 
 ## Installation
 

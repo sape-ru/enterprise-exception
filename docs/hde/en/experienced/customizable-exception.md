@@ -17,7 +17,8 @@ Contents:
 
 A classic exception message is just a string you specify as its constructor first argument.
 [CustomizableException](../dummies/customizable-exception.md) object's _full message_ is composed by
-`getMessageComposed()` from several parts (such as _context_, _base message_ and _details_). This method is called
+`getMessageComposed()` from several parts (such as _context_ `getContext()`, _base message_ `getMessageBase()`
+and _details_ `getDetails()`). This method is called
 implicitly:
 - in the constructor for the [_system_ version](#translation-wrapper);
 - in `getMessageFe()` for the [_frontend_ version](#translation-wrapper) (if an exception
@@ -62,8 +63,7 @@ contact email / page link or anything else you consider non-confidential and use
 
 [CustomizableException](../dummies/customizable-exception.md#setup) and [Parser](../dummies/parser.md#data-returned)
 basics articles mention the translation wrapper `getL10N()`. Initially this public static method just returns its first
-argument (assuming it has a type of string) as is. But you can redefine and extend this method with your application
-translation mechanism.
+argument as is. But you can redefine and extend this method with your application translation mechanism.
 
 This method has two parameters. The first is the string to translate or an argument of any other type you need for
 passing to your translation function. The second is the translation locale.
@@ -86,23 +86,25 @@ value.
 ### Usage
 
 You can call this wrapper manually if you wish. But it is also called implicitly for your convenience:
-- when you [change an exception context](../dummies/customizable-exception.md#exception-context) (`$locale` is set to
-`null`) during runtime;
-- in `getMessageFeStub()` (`$locale` is set to `null`) for the '_error_' substring if you don't
-[redefine it](#frontend-message-stub);
+- when you read an exception _context_ (`getContext()`; `$locale` is set to `null` but you can redefine it by passing
+as an argument);
+- when you read an exception _base message_ (`getMessageBase()`; `$locale` is set to `null` but you can redefine it by
+passing as an argument);
+- when you read exception _details_ (`getDetails()`; `$locale` is set to `null` but you can redefine it by passing
+as an argument);
+- in `getMessageFeStub()` (`$locale` is set to `null` but you can redefine it by passing as an argument)
+for the '_error_' substring if you don't [redefine it](#frontend-message-stub);
 - in [Parser](../dummies/parser.md#data-returned) (`$locale` is set to `$options['locale']`) for exceptions messages
 parts while composing parsed data output - you can specify any locale you wish in '_locale_' option (the default
 value is `L10N_SYSTEM_LOCALE`).
 
-The constructor calls `getL10N` twice - for _system_ and _frontend_ version of an exception _context_, _base message_
-and _details_:
-1. The _system_ version is made by passing `L10N_SYSTEM_LOCALE` as `$locale` value. The
-[composed message](#full-message-composer) is passed then to a parent constructor so you can get the original message
-for logs or admin interfaces.
-1. The _frontend_ version is made by passing `null` as `$locale` value. Then the _context_, _base message_ and
-_details_ are accessible separately via `getContext()`, `getMessageBase()` and `getDetails()` accordingly;
-also these parts are used for the frontend [full message](#full-message-composer) composed in `getMessageFe()`
-(if an exception message is configured as frontend-visible).
+Also the constructor calls `getL10N()` for _system_ version of an exception _context_, _base message_ and _details_.
+The _system_ version is made by passing `L10N_SYSTEM_LOCALE` as `$locale` value.
+The [composed message](#full-message-composer) is passed then to a parent constructor so you can get the original
+message for logs or admin interfaces.
+
+You can call methods `getContext()`, `getMessageBase()` and `getDetails()` with the argument `$locale = false`
+if you want to read raw (untranslated) exception message parts.
 
 ## Default base message
 
