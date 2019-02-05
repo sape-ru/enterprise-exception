@@ -103,6 +103,9 @@ The _system_ version is made by passing `L10N_SYSTEM_LOCALE` as `$locale` value.
 The [composed message](#full-message-composer) is passed then to a parent constructor so you can get the original
 message for logs or admin interfaces.
 
+You can call methods `getContext()`, `getMessageBase()` and `getDetails()` with the argument `$locale = false`
+if you want to read raw (untranslated) exception message parts.
+
 ## Default base message
 
 If an exception properties have no '_message_' property then the constructor considers such an exception as non-user (
